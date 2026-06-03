@@ -42,8 +42,8 @@ void MyGLWidget::paintGL ( ){
     while ((err = glGetError()) != GL_NO_ERROR) {
         std::cout << "OpenGL Error: " << err << std::endl;
     }
-    for(int i = 0; i < 10; i++) {
-        for(int j = 0; j < 15; j++) {
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < M; j++) {
             if(lab[i][j] == 1) dibujarPared(j, i);
             else dibujarSuelo(j, i);
             if(lab[i][j] == 2){
@@ -68,7 +68,6 @@ void MyGLWidget::paintGL ( ){
             }
         }
     }
-
     DEBUG("PaintGL");
 }
 
@@ -83,6 +82,7 @@ void MyGLWidget::carregaShaders(){
     matspecLoc = glGetAttribLocation(program->programId(), "matspec");
     matshinLoc = glGetAttribLocation(program->programId(), "matshin");
 }
+
 void MyGLWidget::projectTransform () {
     glm::mat4 Proj;
     float aspect = width() / (float)height();
@@ -113,48 +113,42 @@ void MyGLWidget::keyPressEvent(QKeyEvent *e){
     update();
 }
 
+glm::vec3 MyGLWidget::puntBaseModel(Model& modelo){
+    float xmin = modelo.vertices()[0];
+    float xmax = modelo.vertices()[0];
+    float ymin = modelo.vertices()[1];
+    float zmin = modelo.vertices()[2];
+    float zmax = modelo.vertices()[2];
+    for(unsigned int i = 0; i<modelo.vertices().size(); i+=3){
+        if(modelo.vertices()[i] < xmin) xmin = modelo.vertices()[i];
+        if(modelo.vertices()[i] > xmax) xmax = modelo.vertices()[i];
+        if(modelo.vertices()[i+1] < ymin) ymin = modelo.vertices()[i+1];
+        if(modelo.vertices()[i+2] < zmin) zmin = modelo.vertices()[i+2];
+        if(modelo.vertices()[i+2] > zmax) zmax = modelo.vertices()[i+2];
+    }
+    return glm::vec3((xmax+xmin)/2.0f, ymin, (zmax+zmin)/2.0f);
+}
+
 void MyGLWidget::modelTransformMorty(int fil, int col){
     float altOrig = 312.3;
     float altObj = 1.5;
+    glm::vec3 puntBase = puntBaseModel(morty);
     glm::mat4 TG(1.0f);
     TG = glm::translate(TG, glm::vec3(float(fil)+0.5f, 0.1f, -float(col)));
     TG = glm::scale(TG, glm::vec3(altObj/altOrig, altObj/altOrig, altObj/altOrig));
-    TG = glm::translate(TG, glm::vec3(-100.0f, 213.0f, 6.0f));
+    TG = glm::translate(TG, glm::vec3(-puntBase[0], -puntBase[1], -puntBase[2]));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &TG[0][0]);
-}
-
-glm::vec3 MyGLWidget::puntMinMorty(){
-    float xmin = morty.vertices()[0];
-    float ymin = morty.vertices()[1];
-    float zmin = morty.vertices()[2];
-    for(unsigned int i = 0; i<morty.vertices().size(); i+=3){
-        if(morty.vertices()[i] < xmin) xmin = morty.vertices()[i];
-        if(morty.vertices()[i+1] < ymin) ymin = morty.vertices()[i+1];
-        if(morty.vertices()[i+2] < zmin) zmin = morty.vertices()[i+2];
-    }
-    return glm::vec3(xmin, ymin, zmin);
 }
 
 void MyGLWidget::modelTransformFantasma(int fil, int col){
     float altOrig = 0.25;
     float altObj = 0.65;
+    glm::vec3 puntBase = puntBaseModel(fantasma);
     glm::mat4 TG(1.0f);
     TG = glm::translate(TG, glm::vec3(float(fil)+0.5f, 0.1f, -float(col)));
     TG = glm::scale(TG, glm::vec3(altObj/altOrig, altObj/altOrig, altObj/altOrig));
-    TG = glm::translate(TG, glm::vec3(-0, -0, -0));
+    TG = glm::translate(TG, glm::vec3(-puntBase[0], -puntBase[1], -puntBase[2]));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &TG[0][0]);
-}
-
-glm::vec3 MyGLWidget::puntMinFantasma(){
-    float xmin = fantasma.vertices()[0];
-    float ymin = fantasma.vertices()[1];
-    float zmin = fantasma.vertices()[2];
-    for(unsigned int i = 0; i<fantasma.vertices().size(); i+=3){
-        if(fantasma.vertices()[i] < xmin) xmin = fantasma.vertices()[i];
-        if(fantasma.vertices()[i+1] < ymin) ymin = fantasma.vertices()[i+1];
-        if(fantasma.vertices()[i+2] < zmin) zmin = fantasma.vertices()[i+2];
-    }
-    return glm::vec3(xmin, ymin, zmin);
 }
 
 void MyGLWidget::generarMonedes(){
@@ -172,57 +166,34 @@ void MyGLWidget::generarMonedes(){
 void MyGLWidget::modelTransformMoneda(int fil, int col){
     float altOrig = 11;
     float altObj = 0.5;
+    glm::vec3 puntBase = puntBaseModel(moneda);
     glm::mat4 TG(1.0f);
     TG = glm::translate(TG, glm::vec3(float(fil), 0.1f, -float(col)));
     TG = glm::scale(TG, glm::vec3(altObj/altOrig, altObj/altOrig, altObj/altOrig));
-    TG = glm::translate(TG, glm::vec3(0, 5.5, 0.25));
+    TG = glm::translate(TG, glm::vec3(-puntBase[0], -puntBase[1], -puntBase[2]));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &TG[0][0]);
-}
-
-glm::vec3 MyGLWidget::puntMinMoneda(){
-    float xmin = moneda.vertices()[0];
-    float ymin = moneda.vertices()[1];
-    float zmin = moneda.vertices()[2];
-    for(unsigned int i = 0; i<moneda.vertices().size(); i+=3){
-        if(moneda.vertices()[i] < xmin) xmin = moneda.vertices()[i];
-        if(moneda.vertices()[i+1] < ymin) ymin = moneda.vertices()[i+1];
-        if(moneda.vertices()[i+2] < zmin) zmin = moneda.vertices()[i+2];
-    }
-    return glm::vec3(xmin, ymin, zmin);
 }
 
 void MyGLWidget::modelTransformTorre(int fil, int col){
     float altOrig = 172;
     float altObj = 6;
     glm::mat4 TG(1.0f);
-    if(fil == 0) TG = glm::translate(TG, glm::vec3(float(fil)-1.0f, 0., -float(col)));
+    if(fil == 0) TG = glm::translate(TG, glm::vec3(float(fil)-2.0f, 0., -float(col)));
     else if(fil == 9){
-        TG = glm::translate(TG, glm::vec3(float(fil)+1.0f, 0., -float(col)));
+        TG = glm::translate(TG, glm::vec3(float(fil)+2.0f, 0., -float(col)));
         TG = glm::rotate(TG, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     }
     else if(col == 0){
-        TG = glm::translate(TG, glm::vec3(float(fil), 0., -float(col)+1.0f));
+        TG = glm::translate(TG, glm::vec3(float(fil), 0., -float(col)+2.0f));
         TG = glm::rotate(TG, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     }
     else{
-        TG = glm::translate(TG, glm::vec3(float(fil), 0., -float(col)-1.0f));
+        TG = glm::translate(TG, glm::vec3(float(fil), 0., -float(col)-2.0f));
         TG = glm::rotate(TG, glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     }
     TG = glm::scale(TG, glm::vec3(altObj/altOrig, altObj/altOrig, altObj/altOrig));
     TG = glm::translate(TG, glm::vec3(2, 0, 2));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &TG[0][0]);
-}
-
-glm::vec3 MyGLWidget::puntMinTorre(){
-    float xmin = torre.vertices()[0];
-    float ymin = torre.vertices()[1];
-    float zmin = torre.vertices()[2];
-    for(unsigned int i = 0; i<torre.vertices().size(); i+=3){
-        if(torre.vertices()[i] < xmin) xmin = torre.vertices()[i];
-        if(torre.vertices()[i+1] < ymin) ymin = torre.vertices()[i+1];
-        if(torre.vertices()[i+2] < zmin) zmin = torre.vertices()[i+2];
-    }
-    return glm::vec3(xmin, ymin, zmin);
 }
 
 void MyGLWidget::dibujarPared(int col, int fila){

@@ -28,17 +28,17 @@ class MyGLWidget : public BL2GLWidget {
     void modelTransformFantasma(int fil, int col);
     void modelTransformMoneda(int fil, int col);
     void modelTransformTorre(int fil, int col);
-    glm::vec3 puntMinMorty();
-    glm::vec3 puntMinFantasma();
-    glm::vec3 puntMinMoneda();
-    glm::vec3 puntMinTorre();
+    glm::vec3 puntBaseModel(Model& modelo);
     void dibujarPared(int col, int fila);
     void dibujarSuelo(int col, int fila);
     void crearBuffersModelo(Model& modelo, GLuint& VAO);
     void generarMonedes();
     virtual void keyPressEvent(QKeyEvent *e);
+    void calcularCapsaContenidora();
 
   private:
+    static const int N = 10;
+    static const int M = 15;
     GLuint projLoc;
     GLuint viewLoc;
     GLuint modelLoc;
@@ -46,7 +46,7 @@ class MyGLWidget : public BL2GLWidget {
     Model fantasma;
     Model moneda;
     Model torre;
-    int lab[10][15] = {
+    int lab[N][M] = {
         {1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1},
         {1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 3, 0, 1},
         {1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1},
