@@ -21,10 +21,11 @@ class MyGLWidget : public BL2GLWidget {
     void carregaShaders() override;
     void projectTransform();
     void viewTransform();
+    void resizeGL(int w, int h);
     GLuint VAO_Cub;
     void creaBuffersCub ();
-    void modelTransformMorty();
-    void modelTransformFantasma();
+    void modelTransformMorty(int fil, int col);
+    void modelTransformFantasma(int fil, int col);
     void modelTransformMoneda(int fil, int col);
     void modelTransformTorre(int fil, int col);
     glm::vec3 puntMinMorty();
@@ -35,6 +36,7 @@ class MyGLWidget : public BL2GLWidget {
     void dibujarSuelo(int col, int fila);
     void crearBuffersModelo(Model& modelo, GLuint& VAO);
     void generarMonedes();
+    virtual void keyPressEvent(QKeyEvent *e);
 
   private:
     GLuint projLoc;
@@ -58,5 +60,5 @@ class MyGLWidget : public BL2GLWidget {
     };
     GLuint VAO_Morty, VAO_Fantasma, VAO_Moneda, VAO_Torre;
     int numMorty, numFantasma, numMoneda, numTorre;
-    int camaraActiva = 0;
+    bool camaraActiva = false;
 };

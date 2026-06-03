@@ -140,8 +140,10 @@ void BL2GLWidget::carregaShaders()
   QOpenGLShader fs (QOpenGLShader::Fragment, this);
   QOpenGLShader vs (QOpenGLShader::Vertex, this);
   // Carreguem el codi dels fitxers i els compilem
-  fs.compileSourceFile(":shaders/basicShader.frag");
-  vs.compileSourceFile(":shaders/basicShader.vert");
+  bool okF = fs.compileSourceFile(":shaders/basicShader.frag");
+  if (!okF) qWarning() << "fragment shader compile log\n" << fs.log();
+  bool okV = vs.compileSourceFile(":shaders/basicShader.vert");
+  if (!okV) qWarning() << "vertex shader compile log\n" << vs.log();
   // Creem el program
   program = new QOpenGLShaderProgram(this);
   // Li afegim els shaders corresponents

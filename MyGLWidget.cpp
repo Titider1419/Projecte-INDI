@@ -13,11 +13,11 @@ MyGLWidget::~MyGLWidget() {
 
 
 void MyGLWidget::initializeGL ( ){
-
     initializeOpenGLFunctions();
-    glEnable (GL_DEPTH_TEST);
     glClearColor(0.5, 0.7, 1.0, 1.0); // defineix color de fons (d'esborrat)
     carregaShaders();
+    glEnable (GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
     morty.load("/home/andres/UNI/Q4/INDI/labs/projecte/models/Morty.obj");
     fantasma.load("/home/andres/UNI/Q4/INDI/labs/projecte/models/Fantasma.obj");
     moneda.load("/home/andres/UNI/Q4/INDI/labs/projecte/models/Coin.obj");
@@ -29,21 +29,32 @@ void MyGLWidget::initializeGL ( ){
     creaBuffersCub();
     generarMonedes();
     escala = 1.0f;
-    DEBUG("InitializeGL");
     projectTransform();
     viewTransform();
+    DEBUG("InitializeGL");
 }
 
 void MyGLWidget::paintGL ( ){
-    BL2GLWidget::paintGL();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    viewTransform();
+    projectTransform();
     GLenum err;
     while ((err = glGetError()) != GL_NO_ERROR) {
         std::cout << "OpenGL Error: " << err << std::endl;
     }
     for(int i = 0; i < 10; i++) {
         for(int j = 0; j < 15; j++) {
-            if(lab[i][j] == 1){
-                dibujarPared(j, i);
+            if(lab[i][j] == 1) dibujarPared(j, i);
+            else dibujarSuelo(j, i);
+            if(lab[i][j] == 2){
+                modelTransformMorty(i, j);
+                glBindVertexArray(VAO_Morty);
+                glDrawArrays(GL_TRIANGLES, 0, numMorty);
+            }
+            else if(lab[i][j] == 3){
+                modelTransformFantasma(i, j);
+                glBindVertexArray(VAO_Fantasma);
+                glDrawArrays(GL_TRIANGLES, 0, numFantasma);
             }
             else if(lab[i][j] == 4){
                 modelTransformTorre(i, j);
@@ -55,18 +66,8 @@ void MyGLWidget::paintGL ( ){
                 glBindVertexArray(VAO_Moneda);
                 glDrawArrays(GL_TRIANGLES, 0, numMoneda);
             }
-            else {
-                dibujarSuelo(j, i);
-            }
         }
     }
-    modelTransformMorty();
-    glBindVertexArray(VAO_Morty);
-    glDrawArrays(GL_TRIANGLES, 0, numMorty);
-    modelTransformFantasma();
-    glBindVertexArray(VAO_Fantasma);
-    glDrawArrays(GL_TRIANGLES, 0, numFantasma);
-    viewTransform();
 
     DEBUG("PaintGL");
 }
@@ -75,7 +76,6 @@ void MyGLWidget::carregaShaders(){
     BL2GLWidget::carregaShaders();
     projLoc = glGetUniformLocation(program->programId(), "proj");
     viewLoc = glGetUniformLocation(program->programId(), "view");
-    modelLoc = glGetUniformLocation(program->programId(), "TG");
     vertexLoc = glGetAttribLocation(program->programId(), "vertex");
     normalLoc = glGetAttribLocation(program->programId(), "normal");
     matambLoc = glGetAttribLocation(program->programId(), "matamb");
@@ -85,30 +85,41 @@ void MyGLWidget::carregaShaders(){
 }
 void MyGLWidget::projectTransform () {
     glm::mat4 Proj;
-    if(camaraActiva == 0) Proj = glm::ortho(0.0f, 15.0f, -10.0f, 0.0f, 0.0f, 100.0f);
-    else {
-        float aspect = width() / (float)height();
-        Proj = glm::perspective(glm::radians(90.0f), aspect, 0.1f, 100.0f);
-    }
+    float aspect = width() / (float)height();
+    if(!camaraActiva) Proj = glm::perspective(glm::radians(90.0f), aspect, 0.1f, 100.0f);
+    else Proj = glm::perspective(glm::radians(90.0f), aspect, 0.1f, 100.0f);
     glUniformMatrix4fv(projLoc, 1, GL_FALSE, &Proj[0][0]);
 }
 
 
 void MyGLWidget::viewTransform () {
     glm::mat4 View;
-    if(camaraActiva == 0) View = glm::lookAt (glm::vec3(7.5, 12.0, 8.0), glm::vec3(7.5, 0.0, -5.0),  glm::vec3(0.0, 1.0, 0.0));
-    else View = glm::lookAt(glm::vec3(12.0f, 1.5f, -8.0f), glm::vec3(12.0f, 1.5f, -7.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    if(!camaraActiva) View = glm::lookAt (glm::vec3(7.5f, 12.0f, 8.0f), glm::vec3(4.5f, 0.0f, -7.0f),  glm::vec3(0.0f, 1.0f, 0.0f));
+    else View = glm::lookAt(glm::vec3(8.5f, 0.75f, -11.5f), glm::vec3(8.5f, 0.75f, -11.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     glUniformMatrix4fv (viewLoc, 1, GL_FALSE, &View[0][0]);
 }
 
-void MyGLWidget::modelTransformMorty(){
+void MyGLWidget::resizeGL(int w, int h){
+    projectTransform();
+}
+
+void MyGLWidget::keyPressEvent(QKeyEvent *e){
+    makeCurrent();
+    switch(e->key()){
+    case Qt::Key_C:
+        camaraActiva = !camaraActiva;
+    break;
+    }
+    update();
+}
+
+void MyGLWidget::modelTransformMorty(int fil, int col){
     float altOrig = 312.3;
     float altObj = 1.5;
-    glm::vec3 pMin = puntMinMorty();
     glm::mat4 TG(1.0f);
-    TG = glm::translate(TG, glm::vec3(12.0, 0.75, -8.0));
+    TG = glm::translate(TG, glm::vec3(float(fil)+0.5f, 0.1f, -float(col)));
     TG = glm::scale(TG, glm::vec3(altObj/altOrig, altObj/altOrig, altObj/altOrig));
-    TG = glm::translate(TG, glm::vec3(-pMin[0], -pMin[1], -pMin[2]));
+    TG = glm::translate(TG, glm::vec3(-100.0f, 213.0f, 6.0f));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &TG[0][0]);
 }
 
@@ -124,14 +135,13 @@ glm::vec3 MyGLWidget::puntMinMorty(){
     return glm::vec3(xmin, ymin, zmin);
 }
 
-void MyGLWidget::modelTransformFantasma(){
+void MyGLWidget::modelTransformFantasma(int fil, int col){
     float altOrig = 0.25;
     float altObj = 0.65;
-    glm::vec3 pMin = puntMinFantasma();
     glm::mat4 TG(1.0f);
-    TG = glm::translate(TG, glm::vec3(12., 0.325, -1.));
+    TG = glm::translate(TG, glm::vec3(float(fil)+0.5f, 0.1f, -float(col)));
     TG = glm::scale(TG, glm::vec3(altObj/altOrig, altObj/altOrig, altObj/altOrig));
-    TG = glm::translate(TG, glm::vec3(-pMin[0], -pMin[1], -pMin[2]));
+    TG = glm::translate(TG, glm::vec3(-0, -0, -0));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &TG[0][0]);
 }
 
@@ -162,11 +172,10 @@ void MyGLWidget::generarMonedes(){
 void MyGLWidget::modelTransformMoneda(int fil, int col){
     float altOrig = 11;
     float altObj = 0.5;
-    glm::vec3 pMin = puntMinMoneda();
     glm::mat4 TG(1.0f);
-    TG = glm::translate(TG, glm::vec3(float(col), 0.25, -float(fil)));
+    TG = glm::translate(TG, glm::vec3(float(fil), 0.1f, -float(col)));
     TG = glm::scale(TG, glm::vec3(altObj/altOrig, altObj/altOrig, altObj/altOrig));
-    TG = glm::translate(TG, glm::vec3(-pMin[0], -pMin[1], -pMin[2]));
+    TG = glm::translate(TG, glm::vec3(0, 5.5, 0.25));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &TG[0][0]);
 }
 
@@ -185,11 +194,22 @@ glm::vec3 MyGLWidget::puntMinMoneda(){
 void MyGLWidget::modelTransformTorre(int fil, int col){
     float altOrig = 172;
     float altObj = 6;
-    glm::vec3 pMin = puntMinTorre();
     glm::mat4 TG(1.0f);
-    TG = glm::translate(TG, glm::vec3(float(col), 0., -float(fil)));
+    if(fil == 0) TG = glm::translate(TG, glm::vec3(float(fil)-1.0f, 0., -float(col)));
+    else if(fil == 9){
+        TG = glm::translate(TG, glm::vec3(float(fil)+1.0f, 0., -float(col)));
+        TG = glm::rotate(TG, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    }
+    else if(col == 0){
+        TG = glm::translate(TG, glm::vec3(float(fil), 0., -float(col)+1.0f));
+        TG = glm::rotate(TG, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    }
+    else{
+        TG = glm::translate(TG, glm::vec3(float(fil), 0., -float(col)-1.0f));
+        TG = glm::rotate(TG, glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    }
     TG = glm::scale(TG, glm::vec3(altObj/altOrig, altObj/altOrig, altObj/altOrig));
-    TG = glm::translate(TG, glm::vec3(-pMin[0], -pMin[1], -pMin[2]));
+    TG = glm::translate(TG, glm::vec3(2, 0, 2));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &TG[0][0]);
 }
 
@@ -207,7 +227,7 @@ glm::vec3 MyGLWidget::puntMinTorre(){
 
 void MyGLWidget::dibujarPared(int col, int fila){
     glm::mat4 TG(1.0f);
-    TG = glm::translate(TG, glm::vec3(float(col), 0.0f, -float(fila)));
+    TG = glm::translate(TG, glm::vec3(float(fila), 0.0f, -float(col)));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &TG[0][0]);
     glBindVertexArray(VAO_Cub);
     glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -215,7 +235,7 @@ void MyGLWidget::dibujarPared(int col, int fila){
 
 void MyGLWidget::dibujarSuelo(int col, int fila) {
     glm::mat4 TG(1.0f);
-    TG = glm::translate(TG, glm::vec3(float(col), 0.0f, -float(fila)));
+    TG = glm::translate(TG, glm::vec3(float(fila), 0.0f, -float(col)));
     TG = glm::scale(TG, glm::vec3(1.0f, 0.1f, 1.0f));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &TG[0][0]);
 
