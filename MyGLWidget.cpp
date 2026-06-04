@@ -18,17 +18,31 @@ void MyGLWidget::initializeGL ( ){
     carregaShaders();
     glEnable (GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    morty.load("/home/andres/UNI/Q4/INDI/labs/projecte/models/Morty.obj");
-    fantasma.load("/home/andres/UNI/Q4/INDI/labs/projecte/models/Fantasma.obj");
-    moneda.load("/home/andres/UNI/Q4/INDI/labs/projecte/models/Coin.obj");
-    torre.load("/home/andres/UNI/Q4/INDI/labs/projecte/models/tower.obj");
+    morty.load("../../Models3D/Morty.obj");
+    fantasma.load("../../Models3D/Fantasma.obj");
+    moneda.load("../../Models3D/Coin.obj");
+    torre.load("../../Models3D/tower.obj");
     crearBuffersModelo(morty, VAO_Morty);
     crearBuffersModelo(fantasma, VAO_Fantasma);
     crearBuffersModelo(moneda, VAO_Moneda);
     crearBuffersModelo(torre, VAO_Torre);
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < M; j++) {
+            if(lab[i][j] == 2){
+                xMorty = i, xPredMorty = i;
+                zMorty = j, zPredMorty = j-1;
+            }
+            else if(lab[i][j] == 3){
+                xFantasma = i, xPredFantasma = i;
+                zFantasma = j, zPredFantasma = j-1;
+            }
+        }
+    }
+    rotMorty = 0.0f;
     creaBuffersCub();
     generarMonedes();
     escala = 1.0f;
+    calcularCapsaContenidora();
     projectTransform();
     viewTransform();
     DEBUG("InitializeGL");
@@ -36,6 +50,7 @@ void MyGLWidget::initializeGL ( ){
 
 void MyGLWidget::paintGL ( ){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    program->bind();
     viewTransform();
     projectTransform();
     GLenum err;
@@ -46,17 +61,7 @@ void MyGLWidget::paintGL ( ){
         for(int j = 0; j < M; j++) {
             if(lab[i][j] == 1) dibujarPared(j, i);
             else dibujarSuelo(j, i);
-            if(lab[i][j] == 2){
-                modelTransformMorty(i, j);
-                glBindVertexArray(VAO_Morty);
-                glDrawArrays(GL_TRIANGLES, 0, numMorty);
-            }
-            else if(lab[i][j] == 3){
-                modelTransformFantasma(i, j);
-                glBindVertexArray(VAO_Fantasma);
-                glDrawArrays(GL_TRIANGLES, 0, numFantasma);
-            }
-            else if(lab[i][j] == 4){
+            if(lab[i][j] == 4){
                 modelTransformTorre(i, j);
                 glBindVertexArray(VAO_Torre);
                 glDrawArrays(GL_TRIANGLES, 0, numTorre);
@@ -68,6 +73,12 @@ void MyGLWidget::paintGL ( ){
             }
         }
     }
+    modelTransformMorty(xMorty, zMorty);
+    glBindVertexArray(VAO_Morty);
+    glDrawArrays(GL_TRIANGLES, 0, numMorty);
+    modelTransformFantasma(xFantasma, zFantasma);
+    glBindVertexArray(VAO_Fantasma);
+    glDrawArrays(GL_TRIANGLES, 0, numFantasma);
     DEBUG("PaintGL");
 }
 
@@ -76,6 +87,7 @@ void MyGLWidget::carregaShaders(){
     projLoc = glGetUniformLocation(program->programId(), "proj");
     viewLoc = glGetUniformLocation(program->programId(), "view");
     vertexLoc = glGetAttribLocation(program->programId(), "vertex");
+    modelLoc = glGetUniformLocation(program->programId(), "model");
     normalLoc = glGetAttribLocation(program->programId(), "normal");
     matambLoc = glGetAttribLocation(program->programId(), "matamb");
     matdiffLoc = glGetAttribLocation(program->programId(), "matdiff");
@@ -86,7 +98,7 @@ void MyGLWidget::carregaShaders(){
 void MyGLWidget::projectTransform () {
     glm::mat4 Proj;
     float aspect = width() / (float)height();
-    if(!camaraActiva) Proj = glm::perspective(glm::radians(90.0f), aspect, 0.1f, 100.0f);
+    if(!camaraActiva) Proj = glm::perspective(angleIni, aspect, 0.1f, 100.0f);
     else Proj = glm::perspective(glm::radians(90.0f), aspect, 0.1f, 100.0f);
     glUniformMatrix4fv(projLoc, 1, GL_FALSE, &Proj[0][0]);
 }
@@ -94,8 +106,13 @@ void MyGLWidget::projectTransform () {
 
 void MyGLWidget::viewTransform () {
     glm::mat4 View;
-    if(!camaraActiva) View = glm::lookAt (glm::vec3(7.5f, 12.0f, 8.0f), glm::vec3(4.5f, 0.0f, -7.0f),  glm::vec3(0.0f, 1.0f, 0.0f));
-    else View = glm::lookAt(glm::vec3(8.5f, 0.75f, -11.5f), glm::vec3(8.5f, 0.75f, -11.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    if(!camaraActiva) View = glm::lookAt (ubiCamara, centre,  glm::vec3(0.0f, 1.0f, 0.0f));
+    else{
+        if(rotMorty == 0) View = glm::lookAt(glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)), glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)+1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        else if (rotMorty == 90) View = glm::lookAt(glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)), glm::vec3(float(xMorty)+1.5f, 0.75f, -float(zMorty)), glm::vec3(0.0f, 1.0f, 0.0f));
+        else if (rotMorty == 180) View = glm::lookAt(glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)), glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)-1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        else View = glm::lookAt(glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)), glm::vec3(float(xMorty)-0.5f, 0.75f, -float(zMorty)), glm::vec3(0.0f, 1.0f, 0.0f));
+    }
     glUniformMatrix4fv (viewLoc, 1, GL_FALSE, &View[0][0]);
 }
 
@@ -103,11 +120,88 @@ void MyGLWidget::resizeGL(int w, int h){
     projectTransform();
 }
 
+void MyGLWidget::calcularCapsaContenidora(){
+    glm::vec3 tTorreOriginal = tamanyTorre();
+    float factorEscala = 6.0f / 172.0f;
+    glm::vec3 tTorre = tTorreOriginal * factorEscala;
+    pMin = glm::vec3(std::numeric_limits<float>::max());
+    pMax = glm::vec3(-std::numeric_limits<float>::max());
+    bool algunaTorre = false;
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < M; j++) {
+            if(lab[i][j] == 4) {
+                algunaTorre = true;
+                float posX = float(i);
+                float posZ = -float(j);
+                posX += 2.0f * factorEscala;
+                posZ += 2.0f * factorEscala;
+                if (i == 0)      posX -= 2.0f;
+                else if (i == 9) posX += 2.0f;
+                else if (j == 0) posZ += 2.0f;
+                else posZ -= 2.0f;
+                float minX_celda = posX;
+                float maxX_celda = posX + tTorre.x;
+                float minY_celda = 0.0f;
+                float maxY_celda = tTorre.y;
+                float minZ_celda = posZ - tTorre.z;
+                float maxZ_celda = posZ + tTorre.z;
+                pMin.x = std::min(pMin.x, minX_celda);
+                pMax.x = std::max(pMax.x, maxX_celda);
+                pMin.y = std::min(pMin.y, minY_celda);
+                pMax.y = std::max(pMax.y, maxY_celda);
+                pMin.z = std::min(pMin.z, minZ_celda);
+                pMax.z = std::max(pMax.z, maxZ_celda);
+            }
+        }
+    }
+
+    if (!algunaTorre) {
+        pMin = glm::vec3(0.0f, 0.0f, -float(M));
+        pMax = glm::vec3(float(N), 6.0f, 0.0f);
+    }
+    centre = (pMin + pMax) / 2.0f;
+    radi = glm::distance(pMin, centre);
+    float distanciaCamara = glm::distance(centre, ubiCamara);
+    if (distanciaCamara > radi) {
+        angleIni = 2.0f * glm::asin(radi / distanciaCamara);
+    } else {
+        angleIni = glm::radians(60.0f);
+    }
+}
+
+glm::vec3 MyGLWidget::tamanyTorre(){
+    if (torre.vertices().empty()) return glm::vec3(0.0f);
+
+    float xmin = torre.vertices()[0], xmax = torre.vertices()[0];
+    float ymin = torre.vertices()[1], ymax = torre.vertices()[1];
+    float zmin = torre.vertices()[2], zmax = torre.vertices()[2];
+
+    for(unsigned int i = 0; i < torre.vertices().size(); i += 3){
+        if(torre.vertices()[i]   < xmin) xmin = torre.vertices()[i];
+        if(torre.vertices()[i]   > xmax) xmax = torre.vertices()[i];
+        if(torre.vertices()[i+1] < ymin) ymin = torre.vertices()[i+1];
+        if(torre.vertices()[i+1] > ymax) ymax = torre.vertices()[i+1];
+        if(torre.vertices()[i+2] < zmin) zmin = torre.vertices()[i+2];
+        if(torre.vertices()[i+2] > zmax) zmax = torre.vertices()[i+2];
+    }
+    return glm::vec3(xmax-xmin, ymax-ymin, zmax-zmin);
+}
+
 void MyGLWidget::keyPressEvent(QKeyEvent *e){
     makeCurrent();
     switch(e->key()){
     case Qt::Key_C:
         camaraActiva = !camaraActiva;
+    break;
+    case Qt::Key_Up:
+        movimentMorty("Up");
+        movimentFantasma();
+    break;
+    case Qt::Key_Right:
+        movimentMorty("Right");
+    break;
+    case Qt::Key_Left:
+        movimentMorty("Left");
     break;
     }
     update();
@@ -135,9 +229,39 @@ void MyGLWidget::modelTransformMorty(int fil, int col){
     glm::vec3 puntBase = puntBaseModel(morty);
     glm::mat4 TG(1.0f);
     TG = glm::translate(TG, glm::vec3(float(fil)+0.5f, 0.1f, -float(col)));
+    TG = glm::rotate(TG, glm::radians(rotMorty), glm::vec3(0.0f, 1.0f, 0.0f));
     TG = glm::scale(TG, glm::vec3(altObj/altOrig, altObj/altOrig, altObj/altOrig));
     TG = glm::translate(TG, glm::vec3(-puntBase[0], -puntBase[1], -puntBase[2]));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &TG[0][0]);
+}
+
+void MyGLWidget::movimentMorty(std::string dir){
+    if(dir == "Up"){
+        if(lab[xPredMorty][zPredMorty] != 1){
+            xMorty = xPredMorty, zMorty = zPredMorty;
+        }
+    }
+    else if(dir == "Right") rotMorty -= 90.0f;
+    else rotMorty += 90.0f;
+    if(rotMorty == 0){
+        xPredMorty = xMorty;
+        zPredMorty = zMorty-1;
+    }
+    else if(rotMorty == 90){
+        xPredMorty = xMorty+1;
+        zPredMorty = zMorty;
+    }
+    else if(rotMorty == 180){
+        xPredMorty = xMorty;
+        zPredMorty = zMorty+1;
+    }
+    else {
+        xPredMorty = xMorty-1;
+        zPredMorty = zMorty;
+    }
+
+    if(rotMorty < 0) rotMorty += 360;
+    else if (rotMorty >= 360) rotMorty -= 360;
 }
 
 void MyGLWidget::modelTransformFantasma(int fil, int col){
@@ -149,6 +273,11 @@ void MyGLWidget::modelTransformFantasma(int fil, int col){
     TG = glm::scale(TG, glm::vec3(altObj/altOrig, altObj/altOrig, altObj/altOrig));
     TG = glm::translate(TG, glm::vec3(-puntBase[0], -puntBase[1], -puntBase[2]));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &TG[0][0]);
+}
+
+
+void MyGLWidget::movimentFantasma(){
+
 }
 
 void MyGLWidget::generarMonedes(){
@@ -395,7 +524,6 @@ void MyGLWidget::creaBuffersCub ()
 
     glVertexAttribPointer(matspecLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(matspecLoc);
-
     // Buffer de component shininness
     glBindBuffer(GL_ARRAY_BUFFER, VBO_Cub[5]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(matshincub), matshincub, GL_STATIC_DRAW);

@@ -1,6 +1,6 @@
 // MyGLWidget.h
 #include "BL2GLWidget.h"
-#include "/home/andres/UNI/Q4/INDI/labs/projecte/Model/model.h"
+#include "Models3D/model.h"
 #include <QKeyEvent>
 
 class MyGLWidget : public BL2GLWidget {
@@ -34,7 +34,10 @@ class MyGLWidget : public BL2GLWidget {
     void crearBuffersModelo(Model& modelo, GLuint& VAO);
     void generarMonedes();
     virtual void keyPressEvent(QKeyEvent *e);
+    glm::vec3 tamanyTorre();
     void calcularCapsaContenidora();
+    void movimentMorty(std::string dir);
+    void movimentFantasma();
 
   private:
     static const int N = 10;
@@ -61,4 +64,13 @@ class MyGLWidget : public BL2GLWidget {
     GLuint VAO_Morty, VAO_Fantasma, VAO_Moneda, VAO_Torre;
     int numMorty, numFantasma, numMoneda, numTorre;
     bool camaraActiva = false;
+    glm::vec3 ubiCamara = glm::vec3(7.5f, 12.0f, 8.0f);
+    glm::vec3 pMax;
+    glm::vec3 pMin;
+    glm::vec3 centre;
+    float radi;
+    float angleIni;
+    int xMorty, zMorty, xPredMorty, zPredMorty;
+    float rotMorty;
+    int xFantasma, zFantasma, xPredFantasma, zPredFantasma;
 };
