@@ -33,6 +33,110 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
+      <widget class="QPushButton" name="startGame">
+       <property name="text">
+        <string>Start Game</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="monedes">
+       <property name="text">
+        <string>0/10 Monedes</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>PSI</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="psiSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Theta</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="thetaSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Zoom</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="zoomSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="widget_2" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QRadioButton" name="camaraGen">
+            <property name="text">
+             <string>Càmara General</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="primPersona">
+            <property name="text">
+             <string>Primera Persona</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="widget_3" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QRadioButton" name="rotMonedes">
+            <property name="text">
+             <string>Monedes rotan</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="estMonedes">
+            <property name="text">
+             <string>Monedes estàtiques</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>

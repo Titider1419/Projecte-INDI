@@ -9,9 +9,10 @@ class MyGLWidget : public BL2GLWidget {
 
   public:
   MyGLWidget(QWidget *parent=0) : BL2GLWidget(parent){
-      QTimer *timer = new QTimer(this);
+      timer = new QTimer(this);
       connect(timer, &QTimer::timeout, this, &MyGLWidget::rotateCoins);
       timer->start(16);
+      timerActiu = true;
   }
     ~MyGLWidget();
 
@@ -48,9 +49,32 @@ class MyGLWidget : public BL2GLWidget {
     void renderScene();
     void viewTransformMiniMap();
     void projectTransformMiniMap();
+    void reinici();
+    void psiCalcul(float psiNou);
+    void thetaCalcul(float thetaNou);
+    void zoomCalcul(float zoomNou);
 
   public slots:
     void rotateCoins();
+    void startGame();
+    void reiniciar();
+    void psiObtingut(float psiNou);
+    void thetaObtingut(float thetaNou);
+    void zoomObtingut(float zoomNou);
+    void camaraGen();
+    void primeraPers();
+    void rotMonedes();
+    void estMonedes();
+
+  signals:
+    void comptadorMonedes(int actuals, int totals);
+    void guanyat();
+    void perdut();
+    void psiEnviat(float psiNou);
+    void thetaEnviat(float thetaNou);
+    void zoomEnviat(float zoomNou);
+    void alternarCamara(bool primeraPers);
+    void alternarRotacioMoneda(bool timerActiu);
 
   private:
     static const int N = 10;
@@ -84,9 +108,9 @@ class MyGLWidget : public BL2GLWidget {
     float radi;
     float angleIni;
     float angle;
-    int xMorty, zMorty, xPredMorty, zPredMorty;
+    int xAntMorty, zAntMorty, xMorty, zMorty, xPredMorty, zPredMorty;
     float rotMorty;
-    int xFantasma, zFantasma, xPredFantasma, zPredFantasma;
+    int xAntFantasma, zAntFantasma, xFantasma, zFantasma, xPredFantasma, zPredFantasma;
     float rotFantasma;
     int monedesRecollides = 0;
     int monedesTotals = 10;
@@ -94,4 +118,7 @@ class MyGLWidget : public BL2GLWidget {
     float d = 15, theta, psi;
     float xAnt = 0.0f, yAnt = 0.0f;
     float factorGiro = 0.005f, factorZoom = 0.1f;
+    bool start = false;
+    QTimer *timer;
+    bool timerActiu;
 };

@@ -113,6 +113,7 @@ void MyGLWidget::projectTransform () {
     float fovV;
     if (angle < 0.05f) angle = 0.05f;
     if (angle > M_PI_2) angle = M_PI_2-0.05f;
+    zoomCalcul(angle);
     if (aspect >= 1.0f) fovV = 2.0f * angle;
     else fovV = 2.0f * glm::atan(glm::tan(angle) / aspect);
     if(!camaraActiva) Proj = glm::perspective(fovV, aspect, 0.1f, 100.0f);
@@ -158,6 +159,87 @@ void MyGLWidget::projectTransformMiniMap(){
 
     glm::mat4 Proj = glm::ortho(-halfX, halfX, -halfZ, halfZ, -100.0f, 100.0f);
     glUniformMatrix4fv(projLoc, 1, GL_FALSE, &Proj[0][0]);
+}
+
+void MyGLWidget::startGame(){
+    start = true;
+    update();
+}
+
+void MyGLWidget::reiniciar(){
+    reinici();
+    startGame();
+}
+
+void MyGLWidget::psiObtingut(float psiNou){
+    psi = (psiNou/1000.0f)*(M_PI-0.01f);
+    update();
+}
+
+void MyGLWidget::psiCalcul(float psiNou){
+    emit psiEnviat((psiNou/(M_PI-0.01f))*1000.0f);
+}
+
+void MyGLWidget::thetaObtingut(float thetaNou){
+    theta = (thetaNou/1000.0f)*(M_PI_2-0.01f);
+    update();
+}
+
+void MyGLWidget::thetaCalcul(float thetaNou){
+    emit thetaEnviat((thetaNou/(M_PI_2-0.01f))*1000.0f);
+}
+
+void MyGLWidget::zoomObtingut(float zoomNou){
+    angle = 0.05+((1000.0f-zoomNou)/1000.0f)*(M_PI_2-0.1f);
+    update();
+}
+
+void MyGLWidget::zoomCalcul(float zoomNou){
+    float t = (zoomNou - 0.05f) / (M_PI_2 - 0.1f);
+    float tInvertit = 1.0f - t;
+    emit zoomEnviat(tInvertit * 1000.0f);
+}
+
+void MyGLWidget::camaraGen(){
+    camaraActiva = false;
+    update();
+}
+
+void MyGLWidget::primeraPers(){
+    camaraActiva = true;
+    update();
+}
+
+void MyGLWidget::rotMonedes(){
+    timerActiu = true;
+    timer->start(16);
+    update();
+}
+
+void MyGLWidget::estMonedes(){
+    timerActiu = false;
+    timer->stop();
+    update();
+}
+
+void MyGLWidget::reinici(){
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < M; j++) {
+            if(lab[i][j] == 2){
+                xAntMorty = i, xMorty = i, xPredMorty = i;
+                zAntMorty = j+1, zMorty = j, zPredMorty = j-1;
+            }
+            else if(lab[i][j] == 3){
+                xAntFantasma = i, xFantasma = i, xPredFantasma = i;
+                zAntFantasma = j+1, zFantasma = j, zPredFantasma = j-1;
+            }
+        }
+    }
+    rotMorty = 0.0f, rotFantasma = 0.0f;
+    generarMonedes();
+    monedesRecollides = 0;
+    emit comptadorMonedes(monedesRecollides, monedesTotals);
+    update();
 }
 
 void MyGLWidget::calcularCapsaContenidora(){
@@ -232,6 +314,7 @@ void MyGLWidget::keyPressEvent(QKeyEvent *e){
     switch(e->key()){
     case Qt::Key_C:
         camaraActiva = !camaraActiva;
+        emit alternarCamara(camaraActiva);
     break;
     case Qt::Key_Up:
         movimentMorty("Up");
@@ -267,6 +350,12 @@ void MyGLWidget::mouseMoveEvent(QMouseEvent *event){
     if (event->buttons() & Qt::LeftButton){
         psi += deltaX * factorGiro;
         theta -= deltaY * factorGiro;
+
+        psiCalcul(psi);
+        thetaCalcul(theta);
+
+        if (psi > M_PI - 0.01f)  psi = M_PI - 0.01f;
+        if (psi < -M_PI + 0.01f) psi = -M_PI + 0.01f;
 
         if (theta > M_PI_2 - 0.01f)  theta = M_PI_2 - 0.01f;
         if (theta < -M_PI_2 + 0.01f) theta = -M_PI_2 + 0.01f;
@@ -307,38 +396,52 @@ void MyGLWidget::modelTransformMorty(int fil, int col){
 }
 
 void MyGLWidget::movimentMorty(std::string dir){
-    if(dir == "Up"){
-        if(lab[xPredMorty][zPredMorty] != 1){
-            xMorty = xPredMorty, zMorty = zPredMorty;
-            movimentFantasma();
+    if(start){
+        if(dir == "Up"){
+            if(lab[xPredMorty][zPredMorty] != 1){
+                if(lab[xPredMorty][zPredMorty] != 4){
+                    xAntMorty = xMorty, zAntMorty = zMorty;
+                    xMorty = xPredMorty, zMorty = zPredMorty;
+                    movimentFantasma();
+                }
+                else if(lab[xPredMorty][zPredMorty] == 4 and monedesRecollides == monedesTotals){
+                    xMorty = xPredMorty, zMorty = zPredMorty;
+                    movimentFantasma();
+                    emit guanyat();
+                    start = false;
+                }
+            }
+            if((xMorty == xFantasma and zMorty == zFantasma) or (xAntMorty == xFantasma and zAntMorty == zFantasma and xMorty == xAntFantasma and zMorty == zAntFantasma)) emit perdut();
         }
-    }
-    else if(dir == "Right") rotMorty -= 90.0f;
-    else rotMorty += 90.0f;
+        else if(dir == "Right") rotMorty -= 90.0f;
+        else rotMorty += 90.0f;
 
-    if(rotMorty < 0) rotMorty += 360;
-    else if (rotMorty >= 360) rotMorty -= 360;
+        if(rotMorty < 0) rotMorty += 360;
+        else if (rotMorty >= 360) rotMorty -= 360;
 
-    if(rotMorty == 0.0f){
-        xPredMorty = xMorty;
-        zPredMorty = zMorty-1;
-    }
-    else if(rotMorty == 90.0f){
-        xPredMorty = xMorty+1;
-        zPredMorty = zMorty;
-    }
-    else if(rotMorty == 180.0f){
-        xPredMorty = xMorty;
-        zPredMorty = zMorty+1;
-    }
-    else {
-        xPredMorty = xMorty-1;
-        zPredMorty = zMorty;
-    }
+        if(rotMorty == 0.0f){
+            xPredMorty = xMorty;
+            zPredMorty = zMorty-1;
+        }
+        else if(rotMorty == 90.0f){
+            xPredMorty = xMorty+1;
+            zPredMorty = zMorty;
+        }
+        else if(rotMorty == 180.0f){
+            xPredMorty = xMorty;
+            zPredMorty = zMorty+1;
+        }
+        else {
+            xPredMorty = xMorty-1;
+            zPredMorty = zMorty;
+        }
 
-    if(lab[xMorty][zMorty] == 5){
-        lab[xMorty][zMorty] = 0;
-        ++monedesRecollides;
+        if(lab[xMorty][zMorty] == 5){
+            lab[xMorty][zMorty] = 0;
+            ++monedesRecollides;
+            emit comptadorMonedes(monedesRecollides, monedesTotals);
+            update();
+        }
     }
 }
 
@@ -357,6 +460,7 @@ void MyGLWidget::modelTransformFantasma(int fil, int col){
 
 void MyGLWidget::movimentFantasma(){
     if(lab[xPredFantasma][zPredFantasma] != 1){
+        xAntFantasma= xFantasma, zAntFantasma = zFantasma;
         xFantasma = xPredFantasma, zFantasma = zPredFantasma;
     }
     else{

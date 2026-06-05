@@ -12,7 +12,10 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -26,6 +29,24 @@ public:
     QHBoxLayout *horizontalLayout;
     MyGLWidget *widget;
     QVBoxLayout *verticalLayout;
+    QPushButton *startGame;
+    QLabel *monedes;
+    QLabel *label;
+    QSlider *psiSlider;
+    QLabel *label_2;
+    QSlider *thetaSlider;
+    QLabel *label_3;
+    QSlider *zoomSlider;
+    QWidget *widget_2;
+    QHBoxLayout *horizontalLayout_4;
+    QHBoxLayout *horizontalLayout_2;
+    QRadioButton *camaraGen;
+    QRadioButton *primPersona;
+    QWidget *widget_3;
+    QHBoxLayout *horizontalLayout_5;
+    QHBoxLayout *horizontalLayout_3;
+    QRadioButton *rotMonedes;
+    QRadioButton *estMonedes;
     QSpacerItem *verticalSpacer;
     QPushButton *pushButton;
 
@@ -49,6 +70,93 @@ public:
 
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        startGame = new QPushButton(MyForm);
+        startGame->setObjectName(QString::fromUtf8("startGame"));
+
+        verticalLayout->addWidget(startGame);
+
+        monedes = new QLabel(MyForm);
+        monedes->setObjectName(QString::fromUtf8("monedes"));
+
+        verticalLayout->addWidget(monedes);
+
+        label = new QLabel(MyForm);
+        label->setObjectName(QString::fromUtf8("label"));
+
+        verticalLayout->addWidget(label);
+
+        psiSlider = new QSlider(MyForm);
+        psiSlider->setObjectName(QString::fromUtf8("psiSlider"));
+        psiSlider->setOrientation(Qt::Horizontal);
+
+        verticalLayout->addWidget(psiSlider);
+
+        label_2 = new QLabel(MyForm);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
+
+        verticalLayout->addWidget(label_2);
+
+        thetaSlider = new QSlider(MyForm);
+        thetaSlider->setObjectName(QString::fromUtf8("thetaSlider"));
+        thetaSlider->setOrientation(Qt::Horizontal);
+
+        verticalLayout->addWidget(thetaSlider);
+
+        label_3 = new QLabel(MyForm);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+
+        verticalLayout->addWidget(label_3);
+
+        zoomSlider = new QSlider(MyForm);
+        zoomSlider->setObjectName(QString::fromUtf8("zoomSlider"));
+        zoomSlider->setOrientation(Qt::Horizontal);
+
+        verticalLayout->addWidget(zoomSlider);
+
+        widget_2 = new QWidget(MyForm);
+        widget_2->setObjectName(QString::fromUtf8("widget_2"));
+        horizontalLayout_4 = new QHBoxLayout(widget_2);
+        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        camaraGen = new QRadioButton(widget_2);
+        camaraGen->setObjectName(QString::fromUtf8("camaraGen"));
+
+        horizontalLayout_2->addWidget(camaraGen);
+
+        primPersona = new QRadioButton(widget_2);
+        primPersona->setObjectName(QString::fromUtf8("primPersona"));
+
+        horizontalLayout_2->addWidget(primPersona);
+
+
+        horizontalLayout_4->addLayout(horizontalLayout_2);
+
+
+        verticalLayout->addWidget(widget_2);
+
+        widget_3 = new QWidget(MyForm);
+        widget_3->setObjectName(QString::fromUtf8("widget_3"));
+        horizontalLayout_5 = new QHBoxLayout(widget_3);
+        horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+        rotMonedes = new QRadioButton(widget_3);
+        rotMonedes->setObjectName(QString::fromUtf8("rotMonedes"));
+
+        horizontalLayout_3->addWidget(rotMonedes);
+
+        estMonedes = new QRadioButton(widget_3);
+        estMonedes->setObjectName(QString::fromUtf8("estMonedes"));
+
+        horizontalLayout_3->addWidget(estMonedes);
+
+
+        horizontalLayout_5->addLayout(horizontalLayout_3);
+
+
+        verticalLayout->addWidget(widget_3);
+
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer);
@@ -76,6 +184,15 @@ public:
     void retranslateUi(QWidget *MyForm)
     {
         MyForm->setWindowTitle(QCoreApplication::translate("MyForm", "IDI-Lab", nullptr));
+        startGame->setText(QCoreApplication::translate("MyForm", "Start Game", nullptr));
+        monedes->setText(QCoreApplication::translate("MyForm", "0/10 Monedes", nullptr));
+        label->setText(QCoreApplication::translate("MyForm", "PSI", nullptr));
+        label_2->setText(QCoreApplication::translate("MyForm", "Theta", nullptr));
+        label_3->setText(QCoreApplication::translate("MyForm", "Zoom", nullptr));
+        camaraGen->setText(QCoreApplication::translate("MyForm", "C\303\240mara General", nullptr));
+        primPersona->setText(QCoreApplication::translate("MyForm", "Primera Persona", nullptr));
+        rotMonedes->setText(QCoreApplication::translate("MyForm", "Monedes rotan", nullptr));
+        estMonedes->setText(QCoreApplication::translate("MyForm", "Monedes est\303\240tiques", nullptr));
         pushButton->setText(QCoreApplication::translate("MyForm", "&Sortir", nullptr));
     } // retranslateUi
 

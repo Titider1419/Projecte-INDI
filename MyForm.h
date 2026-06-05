@@ -7,6 +7,10 @@ class MyForm : public QWidget
   public:
     MyForm (QWidget *parent=0);
 
+  public slots:
+    void actualitzarMonedes(int actuals, int totals);
+    void jocGuanyat();
+    void jocPerdut();
 
 private:
     Ui::MyForm ui;
