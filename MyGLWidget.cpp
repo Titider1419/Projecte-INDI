@@ -3,6 +3,8 @@
 #include <iostream>
 #include <stdio.h>
 #include<utility>
+#include <QRandomGenerator>
+#include <QVector>
 
 #define CHECK() printOglError(__FILE__, __LINE__, __FUNCTION__)
 #define DEBUG(text) std::cout << __FILE__ << " " << __LINE__ << " " << __FUNCTION__ << ":"<<text<<std::endl;
@@ -38,7 +40,7 @@ void MyGLWidget::initializeGL ( ){
             }
         }
     }
-    rotMorty = 0.0f;
+    rotMorty = 0.0f, rotFantasma = 0.0f;
     creaBuffersCub();
     generarMonedes();
     escala = 1.0f;
@@ -195,7 +197,6 @@ void MyGLWidget::keyPressEvent(QKeyEvent *e){
     break;
     case Qt::Key_Up:
         movimentMorty("Up");
-        movimentFantasma();
     break;
     case Qt::Key_Right:
         movimentMorty("Right");
@@ -239,19 +240,24 @@ void MyGLWidget::movimentMorty(std::string dir){
     if(dir == "Up"){
         if(lab[xPredMorty][zPredMorty] != 1){
             xMorty = xPredMorty, zMorty = zPredMorty;
+            movimentFantasma();
         }
     }
     else if(dir == "Right") rotMorty -= 90.0f;
     else rotMorty += 90.0f;
-    if(rotMorty == 0){
+
+    if(rotMorty < 0) rotMorty += 360;
+    else if (rotMorty >= 360) rotMorty -= 360;
+
+    if(rotMorty == 0.0f){
         xPredMorty = xMorty;
         zPredMorty = zMorty-1;
     }
-    else if(rotMorty == 90){
+    else if(rotMorty == 90.0f){
         xPredMorty = xMorty+1;
         zPredMorty = zMorty;
     }
-    else if(rotMorty == 180){
+    else if(rotMorty == 180.0f){
         xPredMorty = xMorty;
         zPredMorty = zMorty+1;
     }
@@ -260,8 +266,10 @@ void MyGLWidget::movimentMorty(std::string dir){
         zPredMorty = zMorty;
     }
 
-    if(rotMorty < 0) rotMorty += 360;
-    else if (rotMorty >= 360) rotMorty -= 360;
+    if(lab[xMorty][zMorty] == 5){
+        lab[xMorty][zMorty] = 0;
+        ++monedesRecollides;
+    }
 }
 
 void MyGLWidget::modelTransformFantasma(int fil, int col){
@@ -270,6 +278,7 @@ void MyGLWidget::modelTransformFantasma(int fil, int col){
     glm::vec3 puntBase = puntBaseModel(fantasma);
     glm::mat4 TG(1.0f);
     TG = glm::translate(TG, glm::vec3(float(fil)+0.5f, 0.1f, -float(col)));
+    TG = glm::rotate(TG, glm::radians(rotFantasma), glm::vec3(0.0f, 1.0f, 0.0f));
     TG = glm::scale(TG, glm::vec3(altObj/altOrig, altObj/altOrig, altObj/altOrig));
     TG = glm::translate(TG, glm::vec3(-puntBase[0], -puntBase[1], -puntBase[2]));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &TG[0][0]);
@@ -277,7 +286,36 @@ void MyGLWidget::modelTransformFantasma(int fil, int col){
 
 
 void MyGLWidget::movimentFantasma(){
-
+    if(lab[xPredFantasma][zPredFantasma] != 1){
+        xFantasma = xPredFantasma, zFantasma = zPredFantasma;
+    }
+    else{
+        QVector<float> opcions;
+        if(zFantasma > 0 and lab[xFantasma][zFantasma-1] != 1) opcions.append(0.0f);
+        if(zFantasma < M and lab[xFantasma][zFantasma+1] != 1) opcions.append(180.0f);
+        if(xFantasma > 0 and lab[xFantasma-1][zFantasma] != 1) opcions.append(270.0f);
+        if(zFantasma < N and lab[xFantasma+1][zFantasma] != 1) opcions.append(90.0f);
+        if (!opcions.isEmpty()) {
+            int index = QRandomGenerator::global()->bounded(opcions.size());
+            rotFantasma = opcions[index];
+        }
+    }
+    if(rotFantasma == 0.0f){
+        xPredFantasma = xFantasma;
+        zPredFantasma = zFantasma-1;
+    }
+    else if(rotFantasma == 90.0f){
+        xPredFantasma = xFantasma+1;
+        zPredFantasma = zFantasma;
+    }
+    else if(rotFantasma == 180.0f){
+        xPredFantasma = xFantasma;
+        zPredFantasma = zFantasma+1;
+    }
+    else {
+        xPredFantasma = xFantasma-1;
+        zPredFantasma = zFantasma;
+    }
 }
 
 void MyGLWidget::generarMonedes(){

@@ -73,4 +73,7 @@ class MyGLWidget : public BL2GLWidget {
     int xMorty, zMorty, xPredMorty, zPredMorty;
     float rotMorty;
     int xFantasma, zFantasma, xPredFantasma, zPredFantasma;
+    float rotFantasma;
+    int monedesRecollides = 0;
+    int monedesTotals = 10;
 };
