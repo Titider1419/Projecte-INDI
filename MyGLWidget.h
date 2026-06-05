@@ -2,12 +2,17 @@
 #include "BL2GLWidget.h"
 #include "Models3D/model.h"
 #include <QKeyEvent>
+#include <QTimer>
 
 class MyGLWidget : public BL2GLWidget {
   Q_OBJECT
 
   public:
-    MyGLWidget(QWidget *parent=0) : BL2GLWidget(parent) {}
+  MyGLWidget(QWidget *parent=0) : BL2GLWidget(parent) {
+      QTimer *timer = new QTimer(this);
+      connect(timer, &QTimer::timeout, this, &MyGLWidget::rotateCoins);
+      timer->start(16);
+  }
     ~MyGLWidget();
 
   protected:
@@ -38,6 +43,9 @@ class MyGLWidget : public BL2GLWidget {
     void calcularCapsaContenidora();
     void movimentMorty(std::string dir);
     void movimentFantasma();
+
+  public slots:
+    void rotateCoins();
 
   private:
     static const int N = 10;
@@ -76,4 +84,5 @@ class MyGLWidget : public BL2GLWidget {
     float rotFantasma;
     int monedesRecollides = 0;
     int monedesTotals = 10;
+    float rotMoneda = 0.0f;
 };

@@ -17,7 +17,7 @@ CXX           = g++
 DEFINES       = -DQT_QML_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../../../Projecte-INDI-main -I. -I../../glm-master -I../../Models3D -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
+INCPATH       = -I../../../ProjecteINDI -I. -I../../glm-master -I../../Models3D -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
 QMAKE         = /usr/lib/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -37,7 +37,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = Bloc3_Exemple1.0.0
-DISTDIR = /home/andres/UNI/Q4/INDI/labs/projecte/Projecte-INDI-main/build/Unnamed-Debug/.tmp/Bloc3_Exemple1.0.0
+DISTDIR = /home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI/build/Unnamed-Debug/.tmp/Bloc3_Exemple1.0.0
 LINK          = g++
 LFLAGS        = 
 LIBS          = $(SUBLIBS) /usr/lib/x86_64-linux-gnu/libQt5OpenGL.so /usr/lib/x86_64-linux-gnu/libQt5Widgets.so /usr/lib/x86_64-linux-gnu/libQt5Gui.so /usr/lib/x86_64-linux-gnu/libQt5Core.so -lGL -lpthread   
@@ -126,6 +126,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		../../.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -221,6 +222,7 @@ Makefile: ../../Bloc3_Exemple.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g+
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -301,6 +303,7 @@ Makefile: ../../Bloc3_Exemple.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g+
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
@@ -387,9 +390,176 @@ compiler_moc_header_clean:
 	-$(DEL_FILE) moc_MyForm.cpp moc_BL2GLWidget.cpp moc_MyGLWidget.cpp
 moc_MyForm.cpp: ../../MyForm.h \
 		ui_MyForm.h \
+		../../MyGLWidget.h \
+		../../BL2GLWidget.h \
+		../../glm-master/glm/glm.hpp \
+		../../glm-master/glm/detail/_fixes.hpp \
+		../../glm-master/glm/detail/setup.hpp \
+		../../glm-master/glm/simd/platform.h \
+		../../glm-master/glm/simd/neon.h \
+		../../glm-master/glm/fwd.hpp \
+		../../glm-master/glm/detail/qualifier.hpp \
+		../../glm-master/glm/vec2.hpp \
+		../../glm-master/glm/ext/vector_bool2.hpp \
+		../../glm-master/glm/detail/type_vec2.hpp \
+		../../glm-master/glm/detail/_swizzle.hpp \
+		../../glm-master/glm/detail/_swizzle_func.hpp \
+		../../glm-master/glm/detail/type_vec2.inl \
+		../../glm-master/glm/detail/compute_vector_relational.hpp \
+		../../glm-master/glm/ext/vector_bool2_precision.hpp \
+		../../glm-master/glm/ext/vector_float2.hpp \
+		../../glm-master/glm/ext/vector_float2_precision.hpp \
+		../../glm-master/glm/ext/vector_double2.hpp \
+		../../glm-master/glm/ext/vector_double2_precision.hpp \
+		../../glm-master/glm/ext/vector_int2.hpp \
+		../../glm-master/glm/ext/vector_int2_sized.hpp \
+		../../glm-master/glm/ext/scalar_int_sized.hpp \
+		../../glm-master/glm/ext/vector_uint2.hpp \
+		../../glm-master/glm/ext/vector_uint2_sized.hpp \
+		../../glm-master/glm/ext/scalar_uint_sized.hpp \
+		../../glm-master/glm/vec3.hpp \
+		../../glm-master/glm/ext/vector_bool3.hpp \
+		../../glm-master/glm/detail/type_vec3.hpp \
+		../../glm-master/glm/detail/type_vec3.inl \
+		../../glm-master/glm/detail/compute_vector_decl.hpp \
+		../../glm-master/glm/detail/_vectorize.hpp \
+		../../glm-master/glm/detail/type_vec_simd.inl \
+		../../glm-master/glm/ext/vector_bool3_precision.hpp \
+		../../glm-master/glm/ext/vector_float3.hpp \
+		../../glm-master/glm/ext/vector_float3_precision.hpp \
+		../../glm-master/glm/ext/vector_double3.hpp \
+		../../glm-master/glm/ext/vector_double3_precision.hpp \
+		../../glm-master/glm/ext/vector_int3.hpp \
+		../../glm-master/glm/ext/vector_int3_sized.hpp \
+		../../glm-master/glm/ext/vector_uint3.hpp \
+		../../glm-master/glm/ext/vector_uint3_sized.hpp \
+		../../glm-master/glm/vec4.hpp \
+		../../glm-master/glm/ext/vector_bool4.hpp \
+		../../glm-master/glm/detail/type_vec4.hpp \
+		../../glm-master/glm/detail/type_vec4.inl \
+		../../glm-master/glm/ext/vector_bool4_precision.hpp \
+		../../glm-master/glm/ext/vector_float4.hpp \
+		../../glm-master/glm/ext/vector_float4_precision.hpp \
+		../../glm-master/glm/ext/vector_double4.hpp \
+		../../glm-master/glm/ext/vector_double4_precision.hpp \
+		../../glm-master/glm/ext/vector_int4.hpp \
+		../../glm-master/glm/ext/vector_int4_sized.hpp \
+		../../glm-master/glm/ext/vector_uint4.hpp \
+		../../glm-master/glm/ext/vector_uint4_sized.hpp \
+		../../glm-master/glm/mat2x2.hpp \
+		../../glm-master/glm/ext/matrix_double2x2.hpp \
+		../../glm-master/glm/detail/type_mat2x2.hpp \
+		../../glm-master/glm/detail/type_mat2x2.inl \
+		../../glm-master/glm/matrix.hpp \
+		../../glm-master/glm/mat2x3.hpp \
+		../../glm-master/glm/ext/matrix_double2x3.hpp \
+		../../glm-master/glm/detail/type_mat2x3.hpp \
+		../../glm-master/glm/detail/type_mat2x3.inl \
+		../../glm-master/glm/ext/matrix_double2x3_precision.hpp \
+		../../glm-master/glm/ext/matrix_float2x3.hpp \
+		../../glm-master/glm/ext/matrix_float2x3_precision.hpp \
+		../../glm-master/glm/mat2x4.hpp \
+		../../glm-master/glm/ext/matrix_double2x4.hpp \
+		../../glm-master/glm/detail/type_mat2x4.hpp \
+		../../glm-master/glm/detail/type_mat2x4.inl \
+		../../glm-master/glm/ext/matrix_double2x4_precision.hpp \
+		../../glm-master/glm/ext/matrix_float2x4.hpp \
+		../../glm-master/glm/ext/matrix_float2x4_precision.hpp \
+		../../glm-master/glm/mat3x2.hpp \
+		../../glm-master/glm/ext/matrix_double3x2.hpp \
+		../../glm-master/glm/detail/type_mat3x2.hpp \
+		../../glm-master/glm/detail/type_mat3x2.inl \
+		../../glm-master/glm/ext/matrix_double3x2_precision.hpp \
+		../../glm-master/glm/ext/matrix_float3x2.hpp \
+		../../glm-master/glm/ext/matrix_float3x2_precision.hpp \
+		../../glm-master/glm/mat3x3.hpp \
+		../../glm-master/glm/ext/matrix_double3x3.hpp \
+		../../glm-master/glm/detail/type_mat3x3.hpp \
+		../../glm-master/glm/detail/type_mat3x3.inl \
+		../../glm-master/glm/common.hpp \
+		../../glm-master/glm/detail/func_common.inl \
+		../../glm-master/glm/vector_relational.hpp \
+		../../glm-master/glm/detail/func_vector_relational.inl \
+		../../glm-master/glm/detail/func_vector_relational_simd.inl \
+		../../glm-master/glm/detail/compute_common.hpp \
+		../../glm-master/glm/detail/type_vec1.hpp \
+		../../glm-master/glm/detail/type_vec1.inl \
+		../../glm-master/glm/detail/func_common_simd.inl \
+		../../glm-master/glm/simd/common.h \
+		../../glm-master/glm/ext/matrix_double3x3_precision.hpp \
+		../../glm-master/glm/ext/matrix_float3x3.hpp \
+		../../glm-master/glm/ext/matrix_float3x3_precision.hpp \
+		../../glm-master/glm/mat3x4.hpp \
+		../../glm-master/glm/ext/matrix_double3x4.hpp \
+		../../glm-master/glm/detail/type_mat3x4.hpp \
+		../../glm-master/glm/detail/type_mat3x4.inl \
+		../../glm-master/glm/ext/matrix_double3x4_precision.hpp \
+		../../glm-master/glm/ext/matrix_float3x4.hpp \
+		../../glm-master/glm/ext/matrix_float3x4_precision.hpp \
+		../../glm-master/glm/mat4x2.hpp \
+		../../glm-master/glm/ext/matrix_double4x2.hpp \
+		../../glm-master/glm/detail/type_mat4x2.hpp \
+		../../glm-master/glm/detail/type_mat4x2.inl \
+		../../glm-master/glm/ext/matrix_double4x2_precision.hpp \
+		../../glm-master/glm/ext/matrix_float4x2.hpp \
+		../../glm-master/glm/ext/matrix_float4x2_precision.hpp \
+		../../glm-master/glm/mat4x3.hpp \
+		../../glm-master/glm/ext/matrix_double4x3.hpp \
+		../../glm-master/glm/detail/type_mat4x3.hpp \
+		../../glm-master/glm/detail/type_mat4x3.inl \
+		../../glm-master/glm/ext/matrix_double4x3_precision.hpp \
+		../../glm-master/glm/ext/matrix_float4x3.hpp \
+		../../glm-master/glm/ext/matrix_float4x3_precision.hpp \
+		../../glm-master/glm/mat4x4.hpp \
+		../../glm-master/glm/ext/matrix_double4x4.hpp \
+		../../glm-master/glm/detail/type_mat4x4.hpp \
+		../../glm-master/glm/detail/type_mat4x4.inl \
+		../../glm-master/glm/geometric.hpp \
+		../../glm-master/glm/detail/func_geometric.inl \
+		../../glm-master/glm/exponential.hpp \
+		../../glm-master/glm/detail/func_exponential.inl \
+		../../glm-master/glm/detail/func_exponential_simd.inl \
+		../../glm-master/glm/simd/exponential.h \
+		../../glm-master/glm/detail/func_geometric_simd.inl \
+		../../glm-master/glm/simd/geometric.h \
+		../../glm-master/glm/detail/type_mat4x4_simd.inl \
+		../../glm-master/glm/ext/matrix_double4x4_precision.hpp \
+		../../glm-master/glm/ext/matrix_float4x4.hpp \
+		../../glm-master/glm/ext/matrix_float4x4_precision.hpp \
+		../../glm-master/glm/detail/func_matrix.inl \
+		../../glm-master/glm/detail/func_matrix_simd.inl \
+		../../glm-master/glm/simd/matrix.h \
+		../../glm-master/glm/ext/matrix_double2x2_precision.hpp \
+		../../glm-master/glm/ext/matrix_float2x2.hpp \
+		../../glm-master/glm/ext/matrix_float2x2_precision.hpp \
+		../../glm-master/glm/trigonometric.hpp \
+		../../glm-master/glm/detail/func_trigonometric.inl \
+		../../glm-master/glm/detail/func_trigonometric_simd.inl \
+		../../glm-master/glm/packing.hpp \
+		../../glm-master/glm/detail/func_packing.inl \
+		../../glm-master/glm/detail/type_half.hpp \
+		../../glm-master/glm/detail/type_half.inl \
+		../../glm-master/glm/detail/func_packing_simd.inl \
+		../../glm-master/glm/integer.hpp \
+		../../glm-master/glm/detail/func_integer.inl \
+		../../glm-master/glm/detail/func_integer_simd.inl \
+		../../glm-master/glm/simd/integer.h \
+		../../glm-master/glm/gtc/matrix_transform.hpp \
+		../../glm-master/glm/ext/matrix_projection.hpp \
+		../../glm-master/glm/gtc/constants.hpp \
+		../../glm-master/glm/ext/scalar_constants.hpp \
+		../../glm-master/glm/ext/scalar_constants.inl \
+		../../glm-master/glm/gtc/constants.inl \
+		../../glm-master/glm/ext/matrix_projection.inl \
+		../../glm-master/glm/ext/matrix_clip_space.hpp \
+		../../glm-master/glm/ext/matrix_clip_space.inl \
+		../../glm-master/glm/ext/matrix_transform.hpp \
+		../../glm-master/glm/ext/matrix_transform.inl \
+		../../glm-master/glm/gtc/matrix_transform.inl \
+		../../Models3D/model.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/andres/UNI/Q4/INDI/labs/projecte/Projecte-INDI-main/build/Unnamed-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/andres/UNI/Q4/INDI/labs/projecte/Projecte-INDI-main -I/home/andres/UNI/Q4/INDI/labs/projecte/Projecte-INDI-main/glm-master -I/home/andres/UNI/Q4/INDI/labs/projecte/Projecte-INDI-main/Models3D -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../MyForm.h -o moc_MyForm.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI/build/Unnamed-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI -I/home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI/glm-master -I/home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI/Models3D -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../MyForm.h -o moc_MyForm.cpp
 
 moc_BL2GLWidget.cpp: ../../BL2GLWidget.h \
 		../../glm-master/glm/glm.hpp \
@@ -558,7 +728,7 @@ moc_BL2GLWidget.cpp: ../../BL2GLWidget.h \
 		../../glm-master/glm/gtc/matrix_transform.inl \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/andres/UNI/Q4/INDI/labs/projecte/Projecte-INDI-main/build/Unnamed-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/andres/UNI/Q4/INDI/labs/projecte/Projecte-INDI-main -I/home/andres/UNI/Q4/INDI/labs/projecte/Projecte-INDI-main/glm-master -I/home/andres/UNI/Q4/INDI/labs/projecte/Projecte-INDI-main/Models3D -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../BL2GLWidget.h -o moc_BL2GLWidget.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI/build/Unnamed-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI -I/home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI/glm-master -I/home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI/Models3D -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../BL2GLWidget.h -o moc_BL2GLWidget.cpp
 
 moc_MyGLWidget.cpp: ../../MyGLWidget.h \
 		../../BL2GLWidget.h \
@@ -729,7 +899,7 @@ moc_MyGLWidget.cpp: ../../MyGLWidget.h \
 		../../Models3D/model.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/andres/UNI/Q4/INDI/labs/projecte/Projecte-INDI-main/build/Unnamed-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/andres/UNI/Q4/INDI/labs/projecte/Projecte-INDI-main -I/home/andres/UNI/Q4/INDI/labs/projecte/Projecte-INDI-main/glm-master -I/home/andres/UNI/Q4/INDI/labs/projecte/Projecte-INDI-main/Models3D -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../MyGLWidget.h -o moc_MyGLWidget.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI/build/Unnamed-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI -I/home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI/glm-master -I/home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI/Models3D -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../MyGLWidget.h -o moc_MyGLWidget.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -920,11 +1090,345 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 ####### Compile
 
 main.o: ../../main.cpp ../../MyForm.h \
-		ui_MyForm.h
+		ui_MyForm.h \
+		../../MyGLWidget.h \
+		../../BL2GLWidget.h \
+		../../glm-master/glm/glm.hpp \
+		../../glm-master/glm/detail/_fixes.hpp \
+		../../glm-master/glm/detail/setup.hpp \
+		../../glm-master/glm/simd/platform.h \
+		../../glm-master/glm/simd/neon.h \
+		../../glm-master/glm/fwd.hpp \
+		../../glm-master/glm/detail/qualifier.hpp \
+		../../glm-master/glm/vec2.hpp \
+		../../glm-master/glm/ext/vector_bool2.hpp \
+		../../glm-master/glm/detail/type_vec2.hpp \
+		../../glm-master/glm/detail/_swizzle.hpp \
+		../../glm-master/glm/detail/_swizzle_func.hpp \
+		../../glm-master/glm/detail/type_vec2.inl \
+		../../glm-master/glm/detail/compute_vector_relational.hpp \
+		../../glm-master/glm/ext/vector_bool2_precision.hpp \
+		../../glm-master/glm/ext/vector_float2.hpp \
+		../../glm-master/glm/ext/vector_float2_precision.hpp \
+		../../glm-master/glm/ext/vector_double2.hpp \
+		../../glm-master/glm/ext/vector_double2_precision.hpp \
+		../../glm-master/glm/ext/vector_int2.hpp \
+		../../glm-master/glm/ext/vector_int2_sized.hpp \
+		../../glm-master/glm/ext/scalar_int_sized.hpp \
+		../../glm-master/glm/ext/vector_uint2.hpp \
+		../../glm-master/glm/ext/vector_uint2_sized.hpp \
+		../../glm-master/glm/ext/scalar_uint_sized.hpp \
+		../../glm-master/glm/vec3.hpp \
+		../../glm-master/glm/ext/vector_bool3.hpp \
+		../../glm-master/glm/detail/type_vec3.hpp \
+		../../glm-master/glm/detail/type_vec3.inl \
+		../../glm-master/glm/detail/compute_vector_decl.hpp \
+		../../glm-master/glm/detail/_vectorize.hpp \
+		../../glm-master/glm/detail/type_vec_simd.inl \
+		../../glm-master/glm/ext/vector_bool3_precision.hpp \
+		../../glm-master/glm/ext/vector_float3.hpp \
+		../../glm-master/glm/ext/vector_float3_precision.hpp \
+		../../glm-master/glm/ext/vector_double3.hpp \
+		../../glm-master/glm/ext/vector_double3_precision.hpp \
+		../../glm-master/glm/ext/vector_int3.hpp \
+		../../glm-master/glm/ext/vector_int3_sized.hpp \
+		../../glm-master/glm/ext/vector_uint3.hpp \
+		../../glm-master/glm/ext/vector_uint3_sized.hpp \
+		../../glm-master/glm/vec4.hpp \
+		../../glm-master/glm/ext/vector_bool4.hpp \
+		../../glm-master/glm/detail/type_vec4.hpp \
+		../../glm-master/glm/detail/type_vec4.inl \
+		../../glm-master/glm/ext/vector_bool4_precision.hpp \
+		../../glm-master/glm/ext/vector_float4.hpp \
+		../../glm-master/glm/ext/vector_float4_precision.hpp \
+		../../glm-master/glm/ext/vector_double4.hpp \
+		../../glm-master/glm/ext/vector_double4_precision.hpp \
+		../../glm-master/glm/ext/vector_int4.hpp \
+		../../glm-master/glm/ext/vector_int4_sized.hpp \
+		../../glm-master/glm/ext/vector_uint4.hpp \
+		../../glm-master/glm/ext/vector_uint4_sized.hpp \
+		../../glm-master/glm/mat2x2.hpp \
+		../../glm-master/glm/ext/matrix_double2x2.hpp \
+		../../glm-master/glm/detail/type_mat2x2.hpp \
+		../../glm-master/glm/detail/type_mat2x2.inl \
+		../../glm-master/glm/matrix.hpp \
+		../../glm-master/glm/mat2x3.hpp \
+		../../glm-master/glm/ext/matrix_double2x3.hpp \
+		../../glm-master/glm/detail/type_mat2x3.hpp \
+		../../glm-master/glm/detail/type_mat2x3.inl \
+		../../glm-master/glm/ext/matrix_double2x3_precision.hpp \
+		../../glm-master/glm/ext/matrix_float2x3.hpp \
+		../../glm-master/glm/ext/matrix_float2x3_precision.hpp \
+		../../glm-master/glm/mat2x4.hpp \
+		../../glm-master/glm/ext/matrix_double2x4.hpp \
+		../../glm-master/glm/detail/type_mat2x4.hpp \
+		../../glm-master/glm/detail/type_mat2x4.inl \
+		../../glm-master/glm/ext/matrix_double2x4_precision.hpp \
+		../../glm-master/glm/ext/matrix_float2x4.hpp \
+		../../glm-master/glm/ext/matrix_float2x4_precision.hpp \
+		../../glm-master/glm/mat3x2.hpp \
+		../../glm-master/glm/ext/matrix_double3x2.hpp \
+		../../glm-master/glm/detail/type_mat3x2.hpp \
+		../../glm-master/glm/detail/type_mat3x2.inl \
+		../../glm-master/glm/ext/matrix_double3x2_precision.hpp \
+		../../glm-master/glm/ext/matrix_float3x2.hpp \
+		../../glm-master/glm/ext/matrix_float3x2_precision.hpp \
+		../../glm-master/glm/mat3x3.hpp \
+		../../glm-master/glm/ext/matrix_double3x3.hpp \
+		../../glm-master/glm/detail/type_mat3x3.hpp \
+		../../glm-master/glm/detail/type_mat3x3.inl \
+		../../glm-master/glm/common.hpp \
+		../../glm-master/glm/detail/func_common.inl \
+		../../glm-master/glm/vector_relational.hpp \
+		../../glm-master/glm/detail/func_vector_relational.inl \
+		../../glm-master/glm/detail/func_vector_relational_simd.inl \
+		../../glm-master/glm/detail/compute_common.hpp \
+		../../glm-master/glm/detail/type_vec1.hpp \
+		../../glm-master/glm/detail/type_vec1.inl \
+		../../glm-master/glm/detail/func_common_simd.inl \
+		../../glm-master/glm/simd/common.h \
+		../../glm-master/glm/ext/matrix_double3x3_precision.hpp \
+		../../glm-master/glm/ext/matrix_float3x3.hpp \
+		../../glm-master/glm/ext/matrix_float3x3_precision.hpp \
+		../../glm-master/glm/mat3x4.hpp \
+		../../glm-master/glm/ext/matrix_double3x4.hpp \
+		../../glm-master/glm/detail/type_mat3x4.hpp \
+		../../glm-master/glm/detail/type_mat3x4.inl \
+		../../glm-master/glm/ext/matrix_double3x4_precision.hpp \
+		../../glm-master/glm/ext/matrix_float3x4.hpp \
+		../../glm-master/glm/ext/matrix_float3x4_precision.hpp \
+		../../glm-master/glm/mat4x2.hpp \
+		../../glm-master/glm/ext/matrix_double4x2.hpp \
+		../../glm-master/glm/detail/type_mat4x2.hpp \
+		../../glm-master/glm/detail/type_mat4x2.inl \
+		../../glm-master/glm/ext/matrix_double4x2_precision.hpp \
+		../../glm-master/glm/ext/matrix_float4x2.hpp \
+		../../glm-master/glm/ext/matrix_float4x2_precision.hpp \
+		../../glm-master/glm/mat4x3.hpp \
+		../../glm-master/glm/ext/matrix_double4x3.hpp \
+		../../glm-master/glm/detail/type_mat4x3.hpp \
+		../../glm-master/glm/detail/type_mat4x3.inl \
+		../../glm-master/glm/ext/matrix_double4x3_precision.hpp \
+		../../glm-master/glm/ext/matrix_float4x3.hpp \
+		../../glm-master/glm/ext/matrix_float4x3_precision.hpp \
+		../../glm-master/glm/mat4x4.hpp \
+		../../glm-master/glm/ext/matrix_double4x4.hpp \
+		../../glm-master/glm/detail/type_mat4x4.hpp \
+		../../glm-master/glm/detail/type_mat4x4.inl \
+		../../glm-master/glm/geometric.hpp \
+		../../glm-master/glm/detail/func_geometric.inl \
+		../../glm-master/glm/exponential.hpp \
+		../../glm-master/glm/detail/func_exponential.inl \
+		../../glm-master/glm/detail/func_exponential_simd.inl \
+		../../glm-master/glm/simd/exponential.h \
+		../../glm-master/glm/detail/func_geometric_simd.inl \
+		../../glm-master/glm/simd/geometric.h \
+		../../glm-master/glm/detail/type_mat4x4_simd.inl \
+		../../glm-master/glm/ext/matrix_double4x4_precision.hpp \
+		../../glm-master/glm/ext/matrix_float4x4.hpp \
+		../../glm-master/glm/ext/matrix_float4x4_precision.hpp \
+		../../glm-master/glm/detail/func_matrix.inl \
+		../../glm-master/glm/detail/func_matrix_simd.inl \
+		../../glm-master/glm/simd/matrix.h \
+		../../glm-master/glm/ext/matrix_double2x2_precision.hpp \
+		../../glm-master/glm/ext/matrix_float2x2.hpp \
+		../../glm-master/glm/ext/matrix_float2x2_precision.hpp \
+		../../glm-master/glm/trigonometric.hpp \
+		../../glm-master/glm/detail/func_trigonometric.inl \
+		../../glm-master/glm/detail/func_trigonometric_simd.inl \
+		../../glm-master/glm/packing.hpp \
+		../../glm-master/glm/detail/func_packing.inl \
+		../../glm-master/glm/detail/type_half.hpp \
+		../../glm-master/glm/detail/type_half.inl \
+		../../glm-master/glm/detail/func_packing_simd.inl \
+		../../glm-master/glm/integer.hpp \
+		../../glm-master/glm/detail/func_integer.inl \
+		../../glm-master/glm/detail/func_integer_simd.inl \
+		../../glm-master/glm/simd/integer.h \
+		../../glm-master/glm/gtc/matrix_transform.hpp \
+		../../glm-master/glm/ext/matrix_projection.hpp \
+		../../glm-master/glm/gtc/constants.hpp \
+		../../glm-master/glm/ext/scalar_constants.hpp \
+		../../glm-master/glm/ext/scalar_constants.inl \
+		../../glm-master/glm/gtc/constants.inl \
+		../../glm-master/glm/ext/matrix_projection.inl \
+		../../glm-master/glm/ext/matrix_clip_space.hpp \
+		../../glm-master/glm/ext/matrix_clip_space.inl \
+		../../glm-master/glm/ext/matrix_transform.hpp \
+		../../glm-master/glm/ext/matrix_transform.inl \
+		../../glm-master/glm/gtc/matrix_transform.inl \
+		../../Models3D/model.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../main.cpp
 
 MyForm.o: ../../MyForm.cpp ../../MyForm.h \
-		ui_MyForm.h
+		ui_MyForm.h \
+		../../MyGLWidget.h \
+		../../BL2GLWidget.h \
+		../../glm-master/glm/glm.hpp \
+		../../glm-master/glm/detail/_fixes.hpp \
+		../../glm-master/glm/detail/setup.hpp \
+		../../glm-master/glm/simd/platform.h \
+		../../glm-master/glm/simd/neon.h \
+		../../glm-master/glm/fwd.hpp \
+		../../glm-master/glm/detail/qualifier.hpp \
+		../../glm-master/glm/vec2.hpp \
+		../../glm-master/glm/ext/vector_bool2.hpp \
+		../../glm-master/glm/detail/type_vec2.hpp \
+		../../glm-master/glm/detail/_swizzle.hpp \
+		../../glm-master/glm/detail/_swizzle_func.hpp \
+		../../glm-master/glm/detail/type_vec2.inl \
+		../../glm-master/glm/detail/compute_vector_relational.hpp \
+		../../glm-master/glm/ext/vector_bool2_precision.hpp \
+		../../glm-master/glm/ext/vector_float2.hpp \
+		../../glm-master/glm/ext/vector_float2_precision.hpp \
+		../../glm-master/glm/ext/vector_double2.hpp \
+		../../glm-master/glm/ext/vector_double2_precision.hpp \
+		../../glm-master/glm/ext/vector_int2.hpp \
+		../../glm-master/glm/ext/vector_int2_sized.hpp \
+		../../glm-master/glm/ext/scalar_int_sized.hpp \
+		../../glm-master/glm/ext/vector_uint2.hpp \
+		../../glm-master/glm/ext/vector_uint2_sized.hpp \
+		../../glm-master/glm/ext/scalar_uint_sized.hpp \
+		../../glm-master/glm/vec3.hpp \
+		../../glm-master/glm/ext/vector_bool3.hpp \
+		../../glm-master/glm/detail/type_vec3.hpp \
+		../../glm-master/glm/detail/type_vec3.inl \
+		../../glm-master/glm/detail/compute_vector_decl.hpp \
+		../../glm-master/glm/detail/_vectorize.hpp \
+		../../glm-master/glm/detail/type_vec_simd.inl \
+		../../glm-master/glm/ext/vector_bool3_precision.hpp \
+		../../glm-master/glm/ext/vector_float3.hpp \
+		../../glm-master/glm/ext/vector_float3_precision.hpp \
+		../../glm-master/glm/ext/vector_double3.hpp \
+		../../glm-master/glm/ext/vector_double3_precision.hpp \
+		../../glm-master/glm/ext/vector_int3.hpp \
+		../../glm-master/glm/ext/vector_int3_sized.hpp \
+		../../glm-master/glm/ext/vector_uint3.hpp \
+		../../glm-master/glm/ext/vector_uint3_sized.hpp \
+		../../glm-master/glm/vec4.hpp \
+		../../glm-master/glm/ext/vector_bool4.hpp \
+		../../glm-master/glm/detail/type_vec4.hpp \
+		../../glm-master/glm/detail/type_vec4.inl \
+		../../glm-master/glm/ext/vector_bool4_precision.hpp \
+		../../glm-master/glm/ext/vector_float4.hpp \
+		../../glm-master/glm/ext/vector_float4_precision.hpp \
+		../../glm-master/glm/ext/vector_double4.hpp \
+		../../glm-master/glm/ext/vector_double4_precision.hpp \
+		../../glm-master/glm/ext/vector_int4.hpp \
+		../../glm-master/glm/ext/vector_int4_sized.hpp \
+		../../glm-master/glm/ext/vector_uint4.hpp \
+		../../glm-master/glm/ext/vector_uint4_sized.hpp \
+		../../glm-master/glm/mat2x2.hpp \
+		../../glm-master/glm/ext/matrix_double2x2.hpp \
+		../../glm-master/glm/detail/type_mat2x2.hpp \
+		../../glm-master/glm/detail/type_mat2x2.inl \
+		../../glm-master/glm/matrix.hpp \
+		../../glm-master/glm/mat2x3.hpp \
+		../../glm-master/glm/ext/matrix_double2x3.hpp \
+		../../glm-master/glm/detail/type_mat2x3.hpp \
+		../../glm-master/glm/detail/type_mat2x3.inl \
+		../../glm-master/glm/ext/matrix_double2x3_precision.hpp \
+		../../glm-master/glm/ext/matrix_float2x3.hpp \
+		../../glm-master/glm/ext/matrix_float2x3_precision.hpp \
+		../../glm-master/glm/mat2x4.hpp \
+		../../glm-master/glm/ext/matrix_double2x4.hpp \
+		../../glm-master/glm/detail/type_mat2x4.hpp \
+		../../glm-master/glm/detail/type_mat2x4.inl \
+		../../glm-master/glm/ext/matrix_double2x4_precision.hpp \
+		../../glm-master/glm/ext/matrix_float2x4.hpp \
+		../../glm-master/glm/ext/matrix_float2x4_precision.hpp \
+		../../glm-master/glm/mat3x2.hpp \
+		../../glm-master/glm/ext/matrix_double3x2.hpp \
+		../../glm-master/glm/detail/type_mat3x2.hpp \
+		../../glm-master/glm/detail/type_mat3x2.inl \
+		../../glm-master/glm/ext/matrix_double3x2_precision.hpp \
+		../../glm-master/glm/ext/matrix_float3x2.hpp \
+		../../glm-master/glm/ext/matrix_float3x2_precision.hpp \
+		../../glm-master/glm/mat3x3.hpp \
+		../../glm-master/glm/ext/matrix_double3x3.hpp \
+		../../glm-master/glm/detail/type_mat3x3.hpp \
+		../../glm-master/glm/detail/type_mat3x3.inl \
+		../../glm-master/glm/common.hpp \
+		../../glm-master/glm/detail/func_common.inl \
+		../../glm-master/glm/vector_relational.hpp \
+		../../glm-master/glm/detail/func_vector_relational.inl \
+		../../glm-master/glm/detail/func_vector_relational_simd.inl \
+		../../glm-master/glm/detail/compute_common.hpp \
+		../../glm-master/glm/detail/type_vec1.hpp \
+		../../glm-master/glm/detail/type_vec1.inl \
+		../../glm-master/glm/detail/func_common_simd.inl \
+		../../glm-master/glm/simd/common.h \
+		../../glm-master/glm/ext/matrix_double3x3_precision.hpp \
+		../../glm-master/glm/ext/matrix_float3x3.hpp \
+		../../glm-master/glm/ext/matrix_float3x3_precision.hpp \
+		../../glm-master/glm/mat3x4.hpp \
+		../../glm-master/glm/ext/matrix_double3x4.hpp \
+		../../glm-master/glm/detail/type_mat3x4.hpp \
+		../../glm-master/glm/detail/type_mat3x4.inl \
+		../../glm-master/glm/ext/matrix_double3x4_precision.hpp \
+		../../glm-master/glm/ext/matrix_float3x4.hpp \
+		../../glm-master/glm/ext/matrix_float3x4_precision.hpp \
+		../../glm-master/glm/mat4x2.hpp \
+		../../glm-master/glm/ext/matrix_double4x2.hpp \
+		../../glm-master/glm/detail/type_mat4x2.hpp \
+		../../glm-master/glm/detail/type_mat4x2.inl \
+		../../glm-master/glm/ext/matrix_double4x2_precision.hpp \
+		../../glm-master/glm/ext/matrix_float4x2.hpp \
+		../../glm-master/glm/ext/matrix_float4x2_precision.hpp \
+		../../glm-master/glm/mat4x3.hpp \
+		../../glm-master/glm/ext/matrix_double4x3.hpp \
+		../../glm-master/glm/detail/type_mat4x3.hpp \
+		../../glm-master/glm/detail/type_mat4x3.inl \
+		../../glm-master/glm/ext/matrix_double4x3_precision.hpp \
+		../../glm-master/glm/ext/matrix_float4x3.hpp \
+		../../glm-master/glm/ext/matrix_float4x3_precision.hpp \
+		../../glm-master/glm/mat4x4.hpp \
+		../../glm-master/glm/ext/matrix_double4x4.hpp \
+		../../glm-master/glm/detail/type_mat4x4.hpp \
+		../../glm-master/glm/detail/type_mat4x4.inl \
+		../../glm-master/glm/geometric.hpp \
+		../../glm-master/glm/detail/func_geometric.inl \
+		../../glm-master/glm/exponential.hpp \
+		../../glm-master/glm/detail/func_exponential.inl \
+		../../glm-master/glm/detail/func_exponential_simd.inl \
+		../../glm-master/glm/simd/exponential.h \
+		../../glm-master/glm/detail/func_geometric_simd.inl \
+		../../glm-master/glm/simd/geometric.h \
+		../../glm-master/glm/detail/type_mat4x4_simd.inl \
+		../../glm-master/glm/ext/matrix_double4x4_precision.hpp \
+		../../glm-master/glm/ext/matrix_float4x4.hpp \
+		../../glm-master/glm/ext/matrix_float4x4_precision.hpp \
+		../../glm-master/glm/detail/func_matrix.inl \
+		../../glm-master/glm/detail/func_matrix_simd.inl \
+		../../glm-master/glm/simd/matrix.h \
+		../../glm-master/glm/ext/matrix_double2x2_precision.hpp \
+		../../glm-master/glm/ext/matrix_float2x2.hpp \
+		../../glm-master/glm/ext/matrix_float2x2_precision.hpp \
+		../../glm-master/glm/trigonometric.hpp \
+		../../glm-master/glm/detail/func_trigonometric.inl \
+		../../glm-master/glm/detail/func_trigonometric_simd.inl \
+		../../glm-master/glm/packing.hpp \
+		../../glm-master/glm/detail/func_packing.inl \
+		../../glm-master/glm/detail/type_half.hpp \
+		../../glm-master/glm/detail/type_half.inl \
+		../../glm-master/glm/detail/func_packing_simd.inl \
+		../../glm-master/glm/integer.hpp \
+		../../glm-master/glm/detail/func_integer.inl \
+		../../glm-master/glm/detail/func_integer_simd.inl \
+		../../glm-master/glm/simd/integer.h \
+		../../glm-master/glm/gtc/matrix_transform.hpp \
+		../../glm-master/glm/ext/matrix_projection.hpp \
+		../../glm-master/glm/gtc/constants.hpp \
+		../../glm-master/glm/ext/scalar_constants.hpp \
+		../../glm-master/glm/ext/scalar_constants.inl \
+		../../glm-master/glm/gtc/constants.inl \
+		../../glm-master/glm/ext/matrix_projection.inl \
+		../../glm-master/glm/ext/matrix_clip_space.hpp \
+		../../glm-master/glm/ext/matrix_clip_space.inl \
+		../../glm-master/glm/ext/matrix_transform.hpp \
+		../../glm-master/glm/ext/matrix_transform.inl \
+		../../glm-master/glm/gtc/matrix_transform.inl \
+		../../Models3D/model.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MyForm.o ../../MyForm.cpp
 
 BL2GLWidget.o: ../../BL2GLWidget.cpp ../../BL2GLWidget.h \

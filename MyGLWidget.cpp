@@ -100,7 +100,10 @@ void MyGLWidget::carregaShaders(){
 void MyGLWidget::projectTransform () {
     glm::mat4 Proj;
     float aspect = width() / (float)height();
-    if(!camaraActiva) Proj = glm::perspective(angleIni, aspect, 0.1f, 100.0f);
+    float fovV;
+    if (aspect >= 1.0f) fovV = 2.0f * angleIni;
+    else fovV = 2.0f * glm::atan(glm::tan(angleIni) / aspect);
+    if(!camaraActiva) Proj = glm::perspective(fovV, aspect, 0.1f, 100.0f);
     else Proj = glm::perspective(glm::radians(90.0f), aspect, 0.1f, 100.0f);
     glUniformMatrix4fv(projLoc, 1, GL_FALSE, &Proj[0][0]);
 }
@@ -119,6 +122,7 @@ void MyGLWidget::viewTransform () {
 }
 
 void MyGLWidget::resizeGL(int w, int h){
+    program->bind();
     projectTransform();
 }
 
@@ -165,7 +169,7 @@ void MyGLWidget::calcularCapsaContenidora(){
     radi = glm::distance(pMin, centre);
     float distanciaCamara = glm::distance(centre, ubiCamara);
     if (distanciaCamara > radi) {
-        angleIni = 2.0f * glm::asin(radi / distanciaCamara);
+        angleIni = glm::asin(radi / distanciaCamara);
     } else {
         angleIni = glm::radians(60.0f);
     }
@@ -336,10 +340,19 @@ void MyGLWidget::modelTransformMoneda(int fil, int col){
     glm::vec3 puntBase = puntBaseModel(moneda);
     glm::mat4 TG(1.0f);
     TG = glm::translate(TG, glm::vec3(float(fil), 0.1f, -float(col)));
+    TG = glm::rotate(TG, glm::radians(rotMoneda), glm::vec3(0.0f, 1.0f, 0.0f));
     TG = glm::scale(TG, glm::vec3(altObj/altOrig, altObj/altOrig, altObj/altOrig));
     TG = glm::translate(TG, glm::vec3(-puntBase[0], -puntBase[1], -puntBase[2]));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &TG[0][0]);
 }
+
+void MyGLWidget::rotateCoins() {
+    makeCurrent();
+    rotMoneda += 2.0f;
+    if (rotMoneda >= 360.0f) rotMoneda -= 360.0f;
+    update();
+}
+
 
 void MyGLWidget::modelTransformTorre(int fil, int col){
     float altOrig = 172;
