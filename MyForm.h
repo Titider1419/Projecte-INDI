@@ -6,7 +6,8 @@ class MyForm : public QWidget
 
   public:
     MyForm (QWidget *parent=0);
-  
-  private:
+
+
+private:
     Ui::MyForm ui;
 };

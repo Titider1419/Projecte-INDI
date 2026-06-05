@@ -26,6 +26,7 @@ public:
     QHBoxLayout *horizontalLayout;
     MyGLWidget *widget;
     QVBoxLayout *verticalLayout;
+    QPushButton *startButton;
     QSpacerItem *verticalSpacer;
     QPushButton *pushButton;
 
@@ -49,6 +50,11 @@ public:
 
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        startButton = new QPushButton(MyForm);
+        startButton->setObjectName(QString::fromUtf8("startButton"));
+
+        verticalLayout->addWidget(startButton);
+
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer);
@@ -68,7 +74,6 @@ public:
 
 
         retranslateUi(MyForm);
-        QObject::connect(pushButton, SIGNAL(clicked()), MyForm, SLOT(close()));
 
         QMetaObject::connectSlotsByName(MyForm);
     } // setupUi
@@ -76,6 +81,7 @@ public:
     void retranslateUi(QWidget *MyForm)
     {
         MyForm->setWindowTitle(QCoreApplication::translate("MyForm", "IDI-Lab", nullptr));
+        startButton->setText(QCoreApplication::translate("MyForm", "Start Game", nullptr));
         pushButton->setText(QCoreApplication::translate("MyForm", "&Sortir", nullptr));
     } // retranslateUi
 

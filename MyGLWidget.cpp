@@ -9,9 +9,7 @@
 #define CHECK() printOglError(__FILE__, __LINE__, __FUNCTION__)
 #define DEBUG(text) std::cout << __FILE__ << " " << __LINE__ << " " << __FUNCTION__ << ":"<<text<<std::endl;
 
-
-MyGLWidget::~MyGLWidget() {
-}
+MyGLWidget::~MyGLWidget() {}
 
 
 void MyGLWidget::initializeGL ( ){
@@ -45,6 +43,7 @@ void MyGLWidget::initializeGL ( ){
     generarMonedes();
     escala = 1.0f;
     calcularCapsaContenidora();
+    angle = angleIni;
     projectTransform();
     viewTransform();
     DEBUG("InitializeGL");
@@ -53,8 +52,32 @@ void MyGLWidget::initializeGL ( ){
 void MyGLWidget::paintGL ( ){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     program->bind();
+    glViewport(0,0, width(), height());
     viewTransform();
     projectTransform();
+    renderScene();
+
+    int xTamany = 300, yTamany = 200;
+    glViewport(width()-xTamany-20, 20, xTamany, yTamany);
+    viewTransformMiniMap();
+    projectTransformMiniMap();
+    renderScene();
+}
+
+void MyGLWidget::carregaShaders(){
+    BL2GLWidget::carregaShaders();
+    projLoc = glGetUniformLocation(program->programId(), "proj");
+    viewLoc = glGetUniformLocation(program->programId(), "view");
+    vertexLoc = glGetAttribLocation(program->programId(), "vertex");
+    modelLoc = glGetUniformLocation(program->programId(), "model");
+    normalLoc = glGetAttribLocation(program->programId(), "normal");
+    matambLoc = glGetAttribLocation(program->programId(), "matamb");
+    matdiffLoc = glGetAttribLocation(program->programId(), "matdiff");
+    matspecLoc = glGetAttribLocation(program->programId(), "matspec");
+    matshinLoc = glGetAttribLocation(program->programId(), "matshin");
+}
+
+void MyGLWidget::renderScene(){
     GLenum err;
     while ((err = glGetError()) != GL_NO_ERROR) {
         std::cout << "OpenGL Error: " << err << std::endl;
@@ -84,25 +107,14 @@ void MyGLWidget::paintGL ( ){
     DEBUG("PaintGL");
 }
 
-void MyGLWidget::carregaShaders(){
-    BL2GLWidget::carregaShaders();
-    projLoc = glGetUniformLocation(program->programId(), "proj");
-    viewLoc = glGetUniformLocation(program->programId(), "view");
-    vertexLoc = glGetAttribLocation(program->programId(), "vertex");
-    modelLoc = glGetUniformLocation(program->programId(), "model");
-    normalLoc = glGetAttribLocation(program->programId(), "normal");
-    matambLoc = glGetAttribLocation(program->programId(), "matamb");
-    matdiffLoc = glGetAttribLocation(program->programId(), "matdiff");
-    matspecLoc = glGetAttribLocation(program->programId(), "matspec");
-    matshinLoc = glGetAttribLocation(program->programId(), "matshin");
-}
-
 void MyGLWidget::projectTransform () {
     glm::mat4 Proj;
     float aspect = width() / (float)height();
     float fovV;
-    if (aspect >= 1.0f) fovV = 2.0f * angleIni;
-    else fovV = 2.0f * glm::atan(glm::tan(angleIni) / aspect);
+    if (angle < 0.05f) angle = 0.05f;
+    if (angle > M_PI_2) angle = M_PI_2-0.05f;
+    if (aspect >= 1.0f) fovV = 2.0f * angle;
+    else fovV = 2.0f * glm::atan(glm::tan(angle) / aspect);
     if(!camaraActiva) Proj = glm::perspective(fovV, aspect, 0.1f, 100.0f);
     else Proj = glm::perspective(glm::radians(90.0f), aspect, 0.1f, 100.0f);
     glUniformMatrix4fv(projLoc, 1, GL_FALSE, &Proj[0][0]);
@@ -110,8 +122,13 @@ void MyGLWidget::projectTransform () {
 
 
 void MyGLWidget::viewTransform () {
-    glm::mat4 View;
-    if(!camaraActiva) View = glm::lookAt (ubiCamara, centre,  glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 View(1.0f);
+    if(!camaraActiva){
+        View = glm::translate(View, glm::vec3(0.0f, 0.0f, -d));
+        View = glm::rotate(View, theta, glm::vec3(1.0f, 0.0f, 0.0f));
+        View = glm::rotate(View, -psi, glm::vec3(0.0f, 1.0f, 0.0f));
+        View = glm::translate(View, -centre);
+    }
     else{
         if(rotMorty == 0) View = glm::lookAt(glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)), glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)+1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         else if (rotMorty == 90) View = glm::lookAt(glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)), glm::vec3(float(xMorty)+1.5f, 0.75f, -float(zMorty)), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -122,8 +139,25 @@ void MyGLWidget::viewTransform () {
 }
 
 void MyGLWidget::resizeGL(int w, int h){
-    program->bind();
-    projectTransform();
+}
+
+void MyGLWidget::viewTransformMiniMap(){
+    glm::mat4 View = glm::lookAt(glm::vec3 (centre.x, centre.y +50.0f, centre.z), centre, glm::vec3(-1.0f, 0.0f, 0.0f));
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &View[0][0]);
+}
+
+void MyGLWidget::projectTransformMiniMap(){
+    float halfX = glm::distance(pMax.x, pMin.x) / 2.0f;
+    float halfZ = glm::distance(pMax.z, pMin.z) / 2.0f;
+
+    float vpAspect = float(M+1) / float(N+1);
+    if (vpAspect > halfX / halfZ)
+        halfX = halfZ * vpAspect;
+    else
+        halfZ = halfX / vpAspect;
+
+    glm::mat4 Proj = glm::ortho(-halfX, halfX, -halfZ, halfZ, -100.0f, 100.0f);
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, &Proj[0][0]);
 }
 
 void MyGLWidget::calcularCapsaContenidora(){
@@ -208,8 +242,40 @@ void MyGLWidget::keyPressEvent(QKeyEvent *e){
     case Qt::Key_Left:
         movimentMorty("Left");
     break;
+    case Qt::Key_Minus:
+        angle += 0.1f;
+    break;
+    case Qt::Key_Plus:
+        angle -= 0.1f;
+    break;
     }
     update();
+}
+
+void MyGLWidget::mousePressEvent(QMouseEvent *event){
+    xAnt = event->x();
+    yAnt = event->y();
+}
+
+void MyGLWidget::mouseMoveEvent(QMouseEvent *event){
+    int deltaX = event->x() - xAnt;
+    int deltaY = event->y() - yAnt;
+
+    xAnt = event->x();
+    yAnt = event->y();
+
+    if (event->buttons() & Qt::LeftButton){
+        psi += deltaX * factorGiro;
+        theta -= deltaY * factorGiro;
+
+        if (theta > M_PI_2 - 0.01f)  theta = M_PI_2 - 0.01f;
+        if (theta < -M_PI_2 + 0.01f) theta = -M_PI_2 + 0.01f;
+        update();
+    }
+    if (event->buttons() & Qt::RightButton){
+        angle += deltaY * factorZoom;
+        update();
+    }
 }
 
 glm::vec3 MyGLWidget::puntBaseModel(Model& modelo){

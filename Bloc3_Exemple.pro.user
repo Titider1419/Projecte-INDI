@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 13.0.0, 2026-06-05T15:07:26. -->
+<!-- Written by QtCreator 13.0.0, 2026-06-05T19:10:57. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -92,7 +92,7 @@
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Unnamed</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Unnamed</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{f9d39623-b725-4e77-a750-6c5159988d57}</value>
-   <value type="qlonglong" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
+   <value type="qlonglong" key="ProjectExplorer.Target.ActiveBuildConfiguration">2</value>
    <value type="qlonglong" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
    <value type="qlonglong" key="ProjectExplorer.Target.ActiveRunConfiguration">2</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
@@ -176,8 +176,8 @@
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.2">
     <value type="int" key="EnableQmlDebugging">0</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/andres/UNI/Q4/INDI/labs/projecte/Codi-Esquelet/build/Unnamed-Profile</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">/home/andres/UNI/Q4/INDI/labs/projecte/Codi-Esquelet/build/Unnamed-Profile</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI/build/Unnamed-Profile</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">/home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI/build/Unnamed-Profile</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
@@ -264,7 +264,7 @@
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI/build/Unnamed-Debug</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI/build/Unnamed-Profile</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.2">
     <value type="bool" key="Analyzer.Perf.Settings.UseGlobalSettings">true</value>
@@ -283,7 +283,7 @@
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI/build/Unnamed-Debug</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/andres/UNI/Q4/INDI/labs/projecte/ProjecteINDI/build/Unnamed-Profile</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">3</value>
   </valuemap>

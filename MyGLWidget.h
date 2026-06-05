@@ -8,7 +8,7 @@ class MyGLWidget : public BL2GLWidget {
   Q_OBJECT
 
   public:
-  MyGLWidget(QWidget *parent=0) : BL2GLWidget(parent) {
+  MyGLWidget(QWidget *parent=0) : BL2GLWidget(parent){
       QTimer *timer = new QTimer(this);
       connect(timer, &QTimer::timeout, this, &MyGLWidget::rotateCoins);
       timer->start(16);
@@ -39,10 +39,15 @@ class MyGLWidget : public BL2GLWidget {
     void crearBuffersModelo(Model& modelo, GLuint& VAO);
     void generarMonedes();
     virtual void keyPressEvent(QKeyEvent *e);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
     glm::vec3 tamanyTorre();
     void calcularCapsaContenidora();
     void movimentMorty(std::string dir);
     void movimentFantasma();
+    void renderScene();
+    void viewTransformMiniMap();
+    void projectTransformMiniMap();
 
   public slots:
     void rotateCoins();
@@ -78,6 +83,7 @@ class MyGLWidget : public BL2GLWidget {
     glm::vec3 centre;
     float radi;
     float angleIni;
+    float angle;
     int xMorty, zMorty, xPredMorty, zPredMorty;
     float rotMorty;
     int xFantasma, zFantasma, xPredFantasma, zPredFantasma;
@@ -85,4 +91,7 @@ class MyGLWidget : public BL2GLWidget {
     int monedesRecollides = 0;
     int monedesTotals = 10;
     float rotMoneda = 0.0f;
+    float d = 15, theta, psi;
+    float xAnt = 0.0f, yAnt = 0.0f;
+    float factorGiro = 0.005f, factorZoom = 0.1f;
 };
