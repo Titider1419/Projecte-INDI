@@ -68,6 +68,7 @@ class MyGLWidget : public BL2GLWidget {
     void estMonedes();
     void canviarColorFocus(const glm::vec3 &nouColor);
     void thetaFocusObtingut(float val);
+    void activarModeNocturn(bool actiu);
 
   signals:
     void comptadorMonedes(int actuals, int totals);
@@ -79,6 +80,8 @@ class MyGLWidget : public BL2GLWidget {
     void alternarCamara(bool primeraPers);
     void alternarRotacioMoneda(bool timerActiu);
     void thetaFocusEnviat(float val);
+    void modeNocturnCanviat(bool actiu);
+
 
   private:
     static const int N = 10;
@@ -128,4 +131,7 @@ class MyGLWidget : public BL2GLWidget {
     bool timerActiu;
     glm::vec3 colorFocus = glm::vec3(1.0f, 1.0f, 1.0f);
     float thetaFocus = M_PI_2;
+    bool modeNocturn = false;
+    GLuint modeNocturnLoc, posLlantLoc, dirLlantLoc, colorLlantLoc;
+    GLuint posFantasmaLlumLoc, colorFantasmaLlumLoc;
 };

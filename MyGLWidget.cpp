@@ -50,6 +50,10 @@ void MyGLWidget::initializeGL ( ){
     glm::vec3 llumAmbientVal = glm::vec3(0.2f, 0.2f, 0.2f);
     glUniform3fv(llumAmbientLoc, 1, &llumAmbientVal[0]);
     angle = angleIni;
+    glm::vec3 colorLlant = glm::vec3(1.0f, 0.8f, 0.0f);
+    glUniform3fv(colorLlantLoc, 1, &colorLlant[0]);
+    glm::vec3 colorFant = glm::vec3(0.6f, 0.0f, 1.0f);
+    glUniform3fv(colorFantasmaLlumLoc, 1, &colorFant[0]);
     projectTransform();
     viewTransform();
     DEBUG("InitializeGL");
@@ -59,6 +63,23 @@ void MyGLWidget::paintGL ( ){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     program->bind();
     program->setUniformValue("colorFocus", colorFocus[0], colorFocus[1], colorFocus[2]);
+    glUniform1i(modeNocturnLoc, modeNocturn ? 1 : 0);
+    glm::vec3 ambient = modeNocturn ? glm::vec3(0.05f, 0.05f, 0.05f) : glm::vec3(0.2f,  0.2f,  0.2f);
+    glUniform3fv(llumAmbientLoc, 1, &ambient[0]);
+
+
+    glm::vec3 posLlant = glm::vec3(float(xMorty)+0.5f, 0.5f, -float(zMorty));
+    glUniform3fv(posLlantLoc, 1, &posLlant[0]);
+
+    glm::vec3 dirLlant;
+    if      (rotMorty == 0.0f)   dirLlant = glm::vec3( 0, 0,  1);
+    else if (rotMorty == 90.0f)  dirLlant = glm::vec3( 1, 0,  0);
+    else if (rotMorty == 180.0f) dirLlant = glm::vec3( 0, 0, -1);
+    else                         dirLlant = glm::vec3(-1, 0,  0);
+    glUniform3fv(dirLlantLoc, 1, &dirLlant[0]);
+
+    glm::vec3 posFantasmaLlum = glm::vec3(float(xFantasma)+0.5f, 0.5f, -float(zFantasma));
+    glUniform3fv(posFantasmaLlumLoc, 1, &posFantasmaLlum[0]);
 
     glm::vec3 posFocus = glm::vec3(centre.x + radi * cos(thetaFocus), centre.y + radi * sin(thetaFocus), 0.0f);
     glUniform3fv(posFocusLoc, 1, &posFocus[0]);
@@ -91,6 +112,12 @@ void MyGLWidget::carregaShaders(){
     posFocusLoc    = glGetUniformLocation(program->programId(), "posFocus");
     colorFocusLoc  = glGetUniformLocation(program->programId(), "colorFocus");
     llumAmbientLoc = glGetUniformLocation(program->programId(), "llumAmbient");
+    modeNocturnLoc = glGetUniformLocation(program->programId(), "modeNocturn");
+    posLlantLoc    = glGetUniformLocation(program->programId(), "posLlanterna");
+    dirLlantLoc    = glGetUniformLocation(program->programId(), "dirLlanterna");
+    colorLlantLoc  = glGetUniformLocation(program->programId(), "colorLlanterna");
+    posFantasmaLlumLoc   = glGetUniformLocation(program->programId(), "posFantasma");
+    colorFantasmaLlumLoc = glGetUniformLocation(program->programId(), "colorFantasma");
 }
 
 void MyGLWidget::renderScene(){
@@ -252,6 +279,11 @@ void MyGLWidget::thetaFocusCalcul(float thetaFocusNou){
     emit thetaFocusEnviat((thetaFocusNou/(M_PI))*1000.0f);
 }
 
+void MyGLWidget::activarModeNocturn(bool actiu) {
+    modeNocturn = actiu;
+    update();
+}
+
 
 void MyGLWidget::reinici(){
     for(int i = 0; i < N; i++) {
@@ -371,6 +403,10 @@ void MyGLWidget::keyPressEvent(QKeyEvent *e){
         thetaFocus += 5.0f;
         if (thetaFocus > M_PI) thetaFocus = M_PI;
         emit thetaFocusEnviat(thetaFocus);
+    break;
+    case Qt::Key_N:
+        modeNocturn = !modeNocturn;
+        emit modeNocturnCanviat(modeNocturn);
     break;
     }
     update();

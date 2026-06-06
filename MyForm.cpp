@@ -61,6 +61,8 @@ MyForm::MyForm (QWidget* parent) : QWidget(parent)
   connect(ui.colorLlum, &QPushButton::clicked, this, &MyForm::colorLlum);
   connect(ui.solSlider, &QSlider::valueChanged, ui.widget, &MyGLWidget::thetaFocusObtingut);
   connect(ui.widget, &MyGLWidget::thetaFocusEnviat, ui.solSlider, &QSlider::setValue);
+  connect(ui.nocturn, &QCheckBox::toggled, ui.widget, &MyGLWidget::activarModeNocturn);
+  connect(ui.widget, &MyGLWidget::modeNocturnCanviat, ui.nocturn, &QCheckBox::setChecked);
 }
 
 void MyForm::actualitzarMonedes(int actuals, int totals){

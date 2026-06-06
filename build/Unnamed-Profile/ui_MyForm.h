@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
@@ -50,6 +51,7 @@ public:
     QPushButton *colorLlum;
     QLabel *label_4;
     QSlider *solSlider;
+    QCheckBox *nocturn;
     QSpacerItem *verticalSpacer;
     QPushButton *pushButton;
 
@@ -176,6 +178,11 @@ public:
 
         verticalLayout->addWidget(solSlider);
 
+        nocturn = new QCheckBox(MyForm);
+        nocturn->setObjectName(QString::fromUtf8("nocturn"));
+
+        verticalLayout->addWidget(nocturn);
+
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer);
@@ -214,6 +221,7 @@ public:
         estMonedes->setText(QCoreApplication::translate("MyForm", "Monedes est\303\240tiques", nullptr));
         colorLlum->setText(QCoreApplication::translate("MyForm", "Color de la Llum Principal", nullptr));
         label_4->setText(QCoreApplication::translate("MyForm", "Sol", nullptr));
+        nocturn->setText(QCoreApplication::translate("MyForm", "Mode Nocturn", nullptr));
         pushButton->setText(QCoreApplication::translate("MyForm", "&Sortir", nullptr));
     } // retranslateUi
 
