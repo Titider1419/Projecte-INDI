@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MyGLWidget_t {
-    QByteArrayData data[26];
-    char stringdata0[279];
+    QByteArrayData data[32];
+    char stringdata0[356];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -49,15 +49,21 @@ QT_MOC_LITERAL(13, 116, 14), // "alternarCamara"
 QT_MOC_LITERAL(14, 131, 11), // "primeraPers"
 QT_MOC_LITERAL(15, 143, 21), // "alternarRotacioMoneda"
 QT_MOC_LITERAL(16, 165, 10), // "timerActiu"
-QT_MOC_LITERAL(17, 176, 11), // "rotateCoins"
-QT_MOC_LITERAL(18, 188, 9), // "startGame"
-QT_MOC_LITERAL(19, 198, 9), // "reiniciar"
-QT_MOC_LITERAL(20, 208, 11), // "psiObtingut"
-QT_MOC_LITERAL(21, 220, 13), // "thetaObtingut"
-QT_MOC_LITERAL(22, 234, 12), // "zoomObtingut"
-QT_MOC_LITERAL(23, 247, 9), // "camaraGen"
-QT_MOC_LITERAL(24, 257, 10), // "rotMonedes"
-QT_MOC_LITERAL(25, 268, 10) // "estMonedes"
+QT_MOC_LITERAL(17, 176, 16), // "thetaFocusEnviat"
+QT_MOC_LITERAL(18, 193, 3), // "val"
+QT_MOC_LITERAL(19, 197, 11), // "rotateCoins"
+QT_MOC_LITERAL(20, 209, 9), // "startGame"
+QT_MOC_LITERAL(21, 219, 9), // "reiniciar"
+QT_MOC_LITERAL(22, 229, 11), // "psiObtingut"
+QT_MOC_LITERAL(23, 241, 13), // "thetaObtingut"
+QT_MOC_LITERAL(24, 255, 12), // "zoomObtingut"
+QT_MOC_LITERAL(25, 268, 9), // "camaraGen"
+QT_MOC_LITERAL(26, 278, 10), // "rotMonedes"
+QT_MOC_LITERAL(27, 289, 10), // "estMonedes"
+QT_MOC_LITERAL(28, 300, 17), // "canviarColorFocus"
+QT_MOC_LITERAL(29, 318, 9), // "glm::vec3"
+QT_MOC_LITERAL(30, 328, 8), // "nouColor"
+QT_MOC_LITERAL(31, 337, 18) // "thetaFocusObtingut"
 
     },
     "MyGLWidget\0comptadorMonedes\0\0actuals\0"
@@ -65,9 +71,11 @@ QT_MOC_LITERAL(25, 268, 10) // "estMonedes"
     "thetaEnviat\0thetaNou\0zoomEnviat\0zoomNou\0"
     "alternarCamara\0primeraPers\0"
     "alternarRotacioMoneda\0timerActiu\0"
-    "rotateCoins\0startGame\0reiniciar\0"
-    "psiObtingut\0thetaObtingut\0zoomObtingut\0"
-    "camaraGen\0rotMonedes\0estMonedes"
+    "thetaFocusEnviat\0val\0rotateCoins\0"
+    "startGame\0reiniciar\0psiObtingut\0"
+    "thetaObtingut\0zoomObtingut\0camaraGen\0"
+    "rotMonedes\0estMonedes\0canviarColorFocus\0"
+    "glm::vec3\0nouColor\0thetaFocusObtingut"
 };
 #undef QT_MOC_LITERAL
 
@@ -77,34 +85,37 @@ static const uint qt_meta_data_MyGLWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      18,   14, // methods
+      21,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       8,       // signalCount
+       9,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    2,  104,    2, 0x06 /* Public */,
-       5,    0,  109,    2, 0x06 /* Public */,
-       6,    0,  110,    2, 0x06 /* Public */,
-       7,    1,  111,    2, 0x06 /* Public */,
-       9,    1,  114,    2, 0x06 /* Public */,
-      11,    1,  117,    2, 0x06 /* Public */,
-      13,    1,  120,    2, 0x06 /* Public */,
-      15,    1,  123,    2, 0x06 /* Public */,
+       1,    2,  119,    2, 0x06 /* Public */,
+       5,    0,  124,    2, 0x06 /* Public */,
+       6,    0,  125,    2, 0x06 /* Public */,
+       7,    1,  126,    2, 0x06 /* Public */,
+       9,    1,  129,    2, 0x06 /* Public */,
+      11,    1,  132,    2, 0x06 /* Public */,
+      13,    1,  135,    2, 0x06 /* Public */,
+      15,    1,  138,    2, 0x06 /* Public */,
+      17,    1,  141,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      17,    0,  126,    2, 0x0a /* Public */,
-      18,    0,  127,    2, 0x0a /* Public */,
-      19,    0,  128,    2, 0x0a /* Public */,
-      20,    1,  129,    2, 0x0a /* Public */,
-      21,    1,  132,    2, 0x0a /* Public */,
-      22,    1,  135,    2, 0x0a /* Public */,
-      23,    0,  138,    2, 0x0a /* Public */,
-      14,    0,  139,    2, 0x0a /* Public */,
-      24,    0,  140,    2, 0x0a /* Public */,
-      25,    0,  141,    2, 0x0a /* Public */,
+      19,    0,  144,    2, 0x0a /* Public */,
+      20,    0,  145,    2, 0x0a /* Public */,
+      21,    0,  146,    2, 0x0a /* Public */,
+      22,    1,  147,    2, 0x0a /* Public */,
+      23,    1,  150,    2, 0x0a /* Public */,
+      24,    1,  153,    2, 0x0a /* Public */,
+      25,    0,  156,    2, 0x0a /* Public */,
+      14,    0,  157,    2, 0x0a /* Public */,
+      26,    0,  158,    2, 0x0a /* Public */,
+      27,    0,  159,    2, 0x0a /* Public */,
+      28,    1,  160,    2, 0x0a /* Public */,
+      31,    1,  163,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int, QMetaType::Int,    3,    4,
@@ -115,6 +126,7 @@ static const uint qt_meta_data_MyGLWidget[] = {
     QMetaType::Void, QMetaType::Float,   12,
     QMetaType::Void, QMetaType::Bool,   14,
     QMetaType::Void, QMetaType::Bool,   16,
+    QMetaType::Void, QMetaType::Float,   18,
 
  // slots: parameters
     QMetaType::Void,
@@ -127,6 +139,8 @@ static const uint qt_meta_data_MyGLWidget[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 29,   30,
+    QMetaType::Void, QMetaType::Float,   18,
 
        0        // eod
 };
@@ -145,16 +159,19 @@ void MyGLWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 5: _t->zoomEnviat((*reinterpret_cast< float(*)>(_a[1]))); break;
         case 6: _t->alternarCamara((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 7: _t->alternarRotacioMoneda((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 8: _t->rotateCoins(); break;
-        case 9: _t->startGame(); break;
-        case 10: _t->reiniciar(); break;
-        case 11: _t->psiObtingut((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 12: _t->thetaObtingut((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 13: _t->zoomObtingut((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 14: _t->camaraGen(); break;
-        case 15: _t->primeraPers(); break;
-        case 16: _t->rotMonedes(); break;
-        case 17: _t->estMonedes(); break;
+        case 8: _t->thetaFocusEnviat((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 9: _t->rotateCoins(); break;
+        case 10: _t->startGame(); break;
+        case 11: _t->reiniciar(); break;
+        case 12: _t->psiObtingut((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 13: _t->thetaObtingut((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 14: _t->zoomObtingut((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 15: _t->camaraGen(); break;
+        case 16: _t->primeraPers(); break;
+        case 17: _t->rotMonedes(); break;
+        case 18: _t->estMonedes(); break;
+        case 19: _t->canviarColorFocus((*reinterpret_cast< const glm::vec3(*)>(_a[1]))); break;
+        case 20: _t->thetaFocusObtingut((*reinterpret_cast< float(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -215,6 +232,13 @@ void MyGLWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
                 return;
             }
         }
+        {
+            using _t = void (MyGLWidget::*)(float );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MyGLWidget::thetaFocusEnviat)) {
+                *result = 8;
+                return;
+            }
+        }
     }
 }
 
@@ -247,13 +271,13 @@ int MyGLWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 18)
+        if (_id < 21)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 18;
+        _id -= 21;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 18)
+        if (_id < 21)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 18;
+        _id -= 21;
     }
     return _id;
 }
@@ -310,6 +334,13 @@ void MyGLWidget::alternarRotacioMoneda(bool _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 7, _a);
+}
+
+// SIGNAL 8
+void MyGLWidget::thetaFocusEnviat(float _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 8, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

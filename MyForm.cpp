@@ -1,6 +1,8 @@
 #include "MyForm.h"
 #include <QMessageBox>
 #include <QPushButton>
+#include <QColorDialog>
+#include <QColor>
 
 MyForm::MyForm (QWidget* parent) : QWidget(parent)
 {
@@ -27,6 +29,12 @@ MyForm::MyForm (QWidget* parent) : QWidget(parent)
   ui.camaraGen->setChecked(true);
   ui.rotMonedes->setChecked(true);
 
+  ui.solSlider->setMinimum(0);
+  ui.solSlider->setMaximum(1000);
+  ui.solSlider->setSingleStep(1);
+  ui.solSlider->setPageStep(10);
+  ui.solSlider->setValue(500);
+
   connect(ui.startGame, &QPushButton::clicked, ui.widget, &MyGLWidget::startGame);
   connect(ui.widget, &MyGLWidget::comptadorMonedes, this, &MyForm::actualitzarMonedes);
   connect(ui.widget, &MyGLWidget::guanyat, this, &MyForm::jocGuanyat);
@@ -50,6 +58,9 @@ MyForm::MyForm (QWidget* parent) : QWidget(parent)
       if (timerActiu) ui.rotMonedes->setChecked(true);
       else ui.estMonedes->setChecked(true);
   });
+  connect(ui.colorLlum, &QPushButton::clicked, this, &MyForm::colorLlum);
+  connect(ui.solSlider, &QSlider::valueChanged, ui.widget, &MyGLWidget::thetaFocusObtingut);
+  connect(ui.widget, &MyGLWidget::thetaFocusEnviat, ui.solSlider, &QSlider::setValue);
 }
 
 void MyForm::actualitzarMonedes(int actuals, int totals){
@@ -91,5 +102,21 @@ void MyForm::jocPerdut(){
     else if (msgBox.clickedButton() == btnSalir)
     {
         this->close();
+    }
+}
+
+void MyForm::colorLlum()
+{
+    QColor colorTriat = QColorDialog::getColor(Qt::white, this, "Escull el color del focus");
+
+
+    if (colorTriat.isValid())
+    {
+        float r = colorTriat.redF();
+        float g = colorTriat.greenF();
+        float b = colorTriat.blueF();
+
+        glm::vec3 colorFormatOpenGL(r, g, b);
+        ui.widget->canviarColorFocus(colorFormatOpenGL);
     }
 }

@@ -53,6 +53,7 @@ class MyGLWidget : public BL2GLWidget {
     void psiCalcul(float psiNou);
     void thetaCalcul(float thetaNou);
     void zoomCalcul(float zoomNou);
+    void thetaFocusCalcul(float thetaFocusNou);
 
   public slots:
     void rotateCoins();
@@ -65,6 +66,8 @@ class MyGLWidget : public BL2GLWidget {
     void primeraPers();
     void rotMonedes();
     void estMonedes();
+    void canviarColorFocus(const glm::vec3 &nouColor);
+    void thetaFocusObtingut(float val);
 
   signals:
     void comptadorMonedes(int actuals, int totals);
@@ -75,6 +78,7 @@ class MyGLWidget : public BL2GLWidget {
     void zoomEnviat(float zoomNou);
     void alternarCamara(bool primeraPers);
     void alternarRotacioMoneda(bool timerActiu);
+    void thetaFocusEnviat(float val);
 
   private:
     static const int N = 10;
@@ -82,6 +86,7 @@ class MyGLWidget : public BL2GLWidget {
     GLuint projLoc;
     GLuint viewLoc;
     GLuint modelLoc;
+    GLuint posFocusLoc, colorFocusLoc, llumAmbientLoc;
     Model morty;
     Model fantasma;
     Model moneda;
@@ -121,4 +126,6 @@ class MyGLWidget : public BL2GLWidget {
     bool start = false;
     QTimer *timer;
     bool timerActiu;
+    glm::vec3 colorFocus = glm::vec3(1.0f, 1.0f, 1.0f);
+    float thetaFocus = M_PI_2;
 };

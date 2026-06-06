@@ -47,6 +47,9 @@ public:
     QHBoxLayout *horizontalLayout_3;
     QRadioButton *rotMonedes;
     QRadioButton *estMonedes;
+    QPushButton *colorLlum;
+    QLabel *label_4;
+    QSlider *solSlider;
     QSpacerItem *verticalSpacer;
     QPushButton *pushButton;
 
@@ -157,6 +160,22 @@ public:
 
         verticalLayout->addWidget(widget_3);
 
+        colorLlum = new QPushButton(MyForm);
+        colorLlum->setObjectName(QString::fromUtf8("colorLlum"));
+
+        verticalLayout->addWidget(colorLlum);
+
+        label_4 = new QLabel(MyForm);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+
+        verticalLayout->addWidget(label_4);
+
+        solSlider = new QSlider(MyForm);
+        solSlider->setObjectName(QString::fromUtf8("solSlider"));
+        solSlider->setOrientation(Qt::Horizontal);
+
+        verticalLayout->addWidget(solSlider);
+
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer);
@@ -193,6 +212,8 @@ public:
         primPersona->setText(QCoreApplication::translate("MyForm", "Primera Persona", nullptr));
         rotMonedes->setText(QCoreApplication::translate("MyForm", "Monedes rotan", nullptr));
         estMonedes->setText(QCoreApplication::translate("MyForm", "Monedes est\303\240tiques", nullptr));
+        colorLlum->setText(QCoreApplication::translate("MyForm", "Color de la Llum Principal", nullptr));
+        label_4->setText(QCoreApplication::translate("MyForm", "Sol", nullptr));
         pushButton->setText(QCoreApplication::translate("MyForm", "&Sortir", nullptr));
     } // retranslateUi
 

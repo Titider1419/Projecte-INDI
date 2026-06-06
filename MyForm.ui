@@ -137,6 +137,27 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="colorLlum">
+       <property name="text">
+        <string>Color de la Llum Principal</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Sol</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="solSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>

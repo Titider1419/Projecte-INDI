@@ -11,6 +11,7 @@ class MyForm : public QWidget
     void actualitzarMonedes(int actuals, int totals);
     void jocGuanyat();
     void jocPerdut();
+    void colorLlum();
 
 private:
     Ui::MyForm ui;

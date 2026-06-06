@@ -43,6 +43,12 @@ void MyGLWidget::initializeGL ( ){
     generarMonedes();
     escala = 1.0f;
     calcularCapsaContenidora();
+    glm::vec3 posFocusVal = glm::vec3(centre.x, centre.y + 10.0f, centre.z);
+    glUniform3fv(posFocusLoc,    1, &posFocusVal[0]);
+    glm::vec3 colorFocusVal = glm::vec3(1.0f, 1.0f, 1.0f);
+    glUniform3fv(colorFocusLoc,  1, &colorFocusVal[0]);
+    glm::vec3 llumAmbientVal = glm::vec3(0.2f, 0.2f, 0.2f);
+    glUniform3fv(llumAmbientLoc, 1, &llumAmbientVal[0]);
     angle = angleIni;
     projectTransform();
     viewTransform();
@@ -52,10 +58,17 @@ void MyGLWidget::initializeGL ( ){
 void MyGLWidget::paintGL ( ){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     program->bind();
+    program->setUniformValue("colorFocus", colorFocus[0], colorFocus[1], colorFocus[2]);
+
+    glm::vec3 posFocus = glm::vec3(centre.x + radi * cos(thetaFocus), centre.y + radi * sin(thetaFocus), 0.0f);
+    glUniform3fv(posFocusLoc, 1, &posFocus[0]);
+
     glViewport(0,0, width(), height());
     viewTransform();
     projectTransform();
     renderScene();
+
+    program->setUniformValue("colorFocus", 1.0f, 1.0f, 1.0f);
 
     int xTamany = 300, yTamany = 200;
     glViewport(width()-xTamany-20, 20, xTamany, yTamany);
@@ -75,6 +88,9 @@ void MyGLWidget::carregaShaders(){
     matdiffLoc = glGetAttribLocation(program->programId(), "matdiff");
     matspecLoc = glGetAttribLocation(program->programId(), "matspec");
     matshinLoc = glGetAttribLocation(program->programId(), "matshin");
+    posFocusLoc    = glGetUniformLocation(program->programId(), "posFocus");
+    colorFocusLoc  = glGetUniformLocation(program->programId(), "colorFocus");
+    llumAmbientLoc = glGetUniformLocation(program->programId(), "llumAmbient");
 }
 
 void MyGLWidget::renderScene(){
@@ -222,6 +238,21 @@ void MyGLWidget::estMonedes(){
     update();
 }
 
+void MyGLWidget::canviarColorFocus(const glm::vec3 &nouColor){
+    colorFocus = nouColor;
+    update();
+}
+
+void MyGLWidget::thetaFocusObtingut(float thetaFocusNou){
+    thetaFocus = (thetaFocusNou/1000.0f)*(M_PI);
+    update();
+}
+
+void MyGLWidget::thetaFocusCalcul(float thetaFocusNou){
+    emit thetaFocusEnviat((thetaFocusNou/(M_PI))*1000.0f);
+}
+
+
 void MyGLWidget::reinici(){
     for(int i = 0; i < N; i++) {
         for(int j = 0; j < M; j++) {
@@ -330,6 +361,16 @@ void MyGLWidget::keyPressEvent(QKeyEvent *e){
     break;
     case Qt::Key_Plus:
         angle -= 0.1f;
+    break;
+    case Qt::Key_O:
+        thetaFocus -= 5.0f;
+        if (thetaFocus < 0.0f) thetaFocus = 0;
+        emit thetaFocusEnviat(thetaFocus);
+    break;
+    case Qt::Key_P:
+        thetaFocus += 5.0f;
+        if (thetaFocus > M_PI) thetaFocus = M_PI;
+        emit thetaFocusEnviat(thetaFocus);
     break;
     }
     update();
