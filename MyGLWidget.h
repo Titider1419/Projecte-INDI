@@ -3,6 +3,7 @@
 #include "Models3D/model.h"
 #include <QKeyEvent>
 #include <QTimer>
+#include <glm/gtc/type_ptr.hpp>
 
 class MyGLWidget : public BL2GLWidget {
   Q_OBJECT
@@ -134,4 +135,5 @@ class MyGLWidget : public BL2GLWidget {
     bool modeNocturn = false;
     GLuint modeNocturnLoc, posLlantLoc, dirLlantLoc, colorLlantLoc;
     GLuint posFantasmaLlumLoc, colorFantasmaLlumLoc;
+    GLuint posMonedesLoc, dirMonedesLoc, numMonedesLoc;
 };

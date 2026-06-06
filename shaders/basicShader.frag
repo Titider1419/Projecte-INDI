@@ -1,5 +1,7 @@
 #version 330 core
 
+
+
 in vec4 fvertSCO;
 in vec3 fnormSCO;
 in vec3 fmatamb;
@@ -19,6 +21,11 @@ uniform vec3 colorLlanterna;
 
 uniform vec3 posFantasma;
 uniform vec3 colorFantasma;
+
+
+uniform vec3 posMonedes[10];
+uniform vec3 dirMonedes[10];
+uniform int  numMonedes;
 
 out vec4 FragColor;
 
@@ -45,6 +52,10 @@ vec3 Especular(vec3 NormSCO, vec3 L, vec4 vertSCO, vec3 colFocus) {
     return (fmatspec * colFocus * shine);
 }
 
+float sigmoid(float dist) {
+    return 1.0 / (1.0 + exp(5.0 * (dist - 4.0)));
+}
+
 void main() {
     vec3 color = Ambient();
     if (!modeNocturn) {
@@ -66,6 +77,23 @@ void main() {
         float distF         = length(posFantasmaSCO - fvertSCO.xyz);
         float atenuacioF    = 1.0 / (1.0 + 0.5*distF + 0.3*distF*distF);
         color += atenuacioF * (Difus(fnormSCO, Lf, colorFantasma) + Especular(fnormSCO, Lf, fvertSCO, colorFantasma));
+
+        for (int k = 0; k < numMonedes; k++) {
+            vec3 posMonSCO = vec3(view * vec4(posMonedes[k], 1.0));
+            vec3 dirMonSCO = normalize(mat3(view) * dirMonedes[k]);
+
+            vec3  L    = normalize(posMonSCO - fvertSCO.xyz);
+            float dist = length(posMonSCO - fvertSCO.xyz);
+
+            float atDist = sigmoid(dist);
+            if (atDist < 0.01) continue;
+
+            float spotFactor = max(0.0, dot(dirMonSCO, L));
+
+            vec3 colorMon = vec3(1.0, 0.85, 0.2);
+            color += atDist * spotFactor * (Difus(fnormSCO, L, colorMon)
+                                          + Especular(fnormSCO, L, fvertSCO, colorMon));
+        }
     }
 
     FragColor = vec4(color, 1.0);

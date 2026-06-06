@@ -84,6 +84,26 @@ void MyGLWidget::paintGL ( ){
     glm::vec3 posFocus = glm::vec3(centre.x + radi * cos(thetaFocus), centre.y + radi * sin(thetaFocus), 0.0f);
     glUniform3fv(posFocusLoc, 1, &posFocus[0]);
 
+    std::vector<glm::vec3> posicions, direccions;
+    float rotRad = glm::radians(rotMoneda);
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < M; j++) {
+            if (lab[i][j] == 5) {
+                glm::vec3 pos = glm::vec3(float(i) + 0.5f, 0.35f, -float(j));
+                posicions.push_back(pos);
+                glm::vec3 dir = glm::normalize(glm::vec3(sin(rotRad), 0.0f, cos(rotRad)));
+                direccions.push_back(dir);
+            }
+        }
+    }
+
+    int numMon = (int)posicions.size();
+    glUniform1i(numMonedesLoc, numMon);
+    if (numMon > 0) {
+        glUniform3fv(posMonedesLoc, numMon, glm::value_ptr(posicions[0]));
+        glUniform3fv(dirMonedesLoc, numMon, glm::value_ptr(direccions[0]));
+    }
+
     glViewport(0,0, width(), height());
     viewTransform();
     projectTransform();
@@ -118,6 +138,9 @@ void MyGLWidget::carregaShaders(){
     colorLlantLoc  = glGetUniformLocation(program->programId(), "colorLlanterna");
     posFantasmaLlumLoc   = glGetUniformLocation(program->programId(), "posFantasma");
     colorFantasmaLlumLoc = glGetUniformLocation(program->programId(), "colorFantasma");
+    posMonedesLoc = glGetUniformLocation(program->programId(), "posMonedes");
+    dirMonedesLoc = glGetUniformLocation(program->programId(), "dirMonedes");
+    numMonedesLoc = glGetUniformLocation(program->programId(), "numMonedes");
 }
 
 void MyGLWidget::renderScene(){
