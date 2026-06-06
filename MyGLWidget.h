@@ -4,6 +4,7 @@
 #include <QKeyEvent>
 #include <QTimer>
 #include <glm/gtc/type_ptr.hpp>
+#include "assimp/Mesh.h"
 
 class MyGLWidget : public BL2GLWidget {
   Q_OBJECT
@@ -55,6 +56,7 @@ class MyGLWidget : public BL2GLWidget {
     void thetaCalcul(float thetaNou);
     void zoomCalcul(float zoomNou);
     void thetaFocusCalcul(float thetaFocusNou);
+    void modelTransformParet(int fil, int col);
 
   public slots:
     void rotateCoins();
@@ -136,4 +138,7 @@ class MyGLWidget : public BL2GLWidget {
     GLuint modeNocturnLoc, posLlantLoc, dirLlantLoc, colorLlantLoc;
     GLuint posFantasmaLlumLoc, colorFantasmaLlumLoc;
     GLuint posMonedesLoc, dirMonedesLoc, numMonedesLoc;
+    Mesh *meshParet = nullptr;
+    Mesh *meshTorre = nullptr;
+    GLuint texUVLoc, texLoc, texActiveLoc;
 };

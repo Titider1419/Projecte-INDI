@@ -21,11 +21,11 @@ void MyGLWidget::initializeGL ( ){
     morty.load("../../Models3D/Morty.obj");
     fantasma.load("../../Models3D/Fantasma.obj");
     moneda.load("../../Models3D/Coin.obj");
-    torre.load("../../Models3D/tower.obj");
     crearBuffersModelo(morty, VAO_Morty);
     crearBuffersModelo(fantasma, VAO_Fantasma);
     crearBuffersModelo(moneda, VAO_Moneda);
-    crearBuffersModelo(torre, VAO_Torre);
+    meshTorre = new Mesh(this, vertexLoc, normalLoc, texUVLoc, matdiffLoc, matspecLoc, matambLoc, matshinLoc);
+    meshTorre->LoadMesh("../../Models3D/tower.obj");
     for(int i = 0; i < N; i++) {
         for(int j = 0; j < M; j++) {
             if(lab[i][j] == 2){
@@ -40,6 +40,8 @@ void MyGLWidget::initializeGL ( ){
     }
     rotMorty = 0.0f, rotFantasma = 0.0f;
     creaBuffersCub();
+    meshParet = new Mesh(this, vertexLoc, normalLoc, texUVLoc, matdiffLoc, matspecLoc, matambLoc, matshinLoc);
+    meshParet->LoadMesh("../../Models3D/block.obj");
     generarMonedes();
     escala = 1.0f;
     calcularCapsaContenidora();
@@ -141,6 +143,9 @@ void MyGLWidget::carregaShaders(){
     posMonedesLoc = glGetUniformLocation(program->programId(), "posMonedes");
     dirMonedesLoc = glGetUniformLocation(program->programId(), "dirMonedes");
     numMonedesLoc = glGetUniformLocation(program->programId(), "numMonedes");
+    texUVLoc = glGetAttribLocation(program->programId(), "UV");
+    texLoc = glGetUniformLocation(program->programId(), "text");
+    texActiveLoc = glGetUniformLocation(program->programId(), "textActive");
 }
 
 void MyGLWidget::renderScene(){
@@ -150,20 +155,31 @@ void MyGLWidget::renderScene(){
     }
     for(int i = 0; i < N; i++) {
         for(int j = 0; j < M; j++) {
-            if(lab[i][j] == 1) dibujarPared(j, i);
-            else dibujarSuelo(j, i);
+            if(lab[i][j] == 1){
+                glUniform1i(texActiveLoc, 1);
+                glUniform1i(texLoc, 0);
+                modelTransformParet(i, j);
+                meshParet->Render();
+            }
+            else{
+                glUniform1i(texActiveLoc, 0);
+                dibujarSuelo(j, i);
+            }
             if(lab[i][j] == 4){
+                glUniform1i(texActiveLoc, 1);
+                glUniform1i(texLoc, 0);
                 modelTransformTorre(i, j);
-                glBindVertexArray(VAO_Torre);
-                glDrawArrays(GL_TRIANGLES, 0, numTorre);
+                meshTorre->Render();
             }
             else if(lab[i][j] == 5){
+                glUniform1i(texActiveLoc, 0);
                 modelTransformMoneda(i, j);
                 glBindVertexArray(VAO_Moneda);
                 glDrawArrays(GL_TRIANGLES, 0, numMoneda);
             }
         }
     }
+    glUniform1i(texActiveLoc, 0);
     modelTransformMorty(xMorty, zMorty);
     glBindVertexArray(VAO_Morty);
     glDrawArrays(GL_TRIANGLES, 0, numMorty);
@@ -329,8 +345,8 @@ void MyGLWidget::reinici(){
 }
 
 void MyGLWidget::calcularCapsaContenidora(){
-    glm::vec3 tTorreOriginal = tamanyTorre();
-    float factorEscala = 6.0f / 172.0f;
+    glm::vec3 tTorreOriginal = meshTorre->GetBBSize();
+    float factorEscala = 6.0f / meshTorre->GetBBSize().y;
     glm::vec3 tTorre = tTorreOriginal * factorEscala;
     pMin = glm::vec3(std::numeric_limits<float>::max());
     pMax = glm::vec3(-std::numeric_limits<float>::max());
@@ -625,24 +641,39 @@ void MyGLWidget::rotateCoins() {
 
 
 void MyGLWidget::modelTransformTorre(int fil, int col){
-    float altOrig = 172;
-    float altObj = 6;
+    glm::vec3 bbMin  = meshTorre->GetBBMin();
+    glm::vec3 bbSize = meshTorre->GetBBSize();
+    float altObj = 6.0f;
+    float escala = altObj / bbSize.y;
     glm::mat4 TG(1.0f);
-    if(fil == 0) TG = glm::translate(TG, glm::vec3(float(fil)-2.0f, 0., -float(col)));
-    else if(fil == 9){
-        TG = glm::translate(TG, glm::vec3(float(fil)+2.0f, 0., -float(col)));
-        TG = glm::rotate(TG, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    if (fil == 0){
+        TG = glm::translate(TG, glm::vec3(float(fil)-2.5f, 0.f, -float(col)+0.6f));
+        TG = glm::rotate(TG, glm::radians(90.0f), glm::vec3(0,1,0));
     }
-    else if(col == 0){
-        TG = glm::translate(TG, glm::vec3(float(fil), 0., -float(col)+2.0f));
-        TG = glm::rotate(TG, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    else if (fil == 9) {
+        TG = glm::translate(TG, glm::vec3(float(fil)+2.5, 0.f, -float(col)-0.6f));
+        TG = glm::rotate(TG, glm::radians(270.0f), glm::vec3(0,1,0));
     }
-    else{
-        TG = glm::translate(TG, glm::vec3(float(fil), 0., -float(col)-2.0f));
-        TG = glm::rotate(TG, glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    else if (col == 0) {
+        TG = glm::translate(TG, glm::vec3(float(fil)+0.6f, 0.f, -float(col)+2.5f));
+        TG = glm::rotate(TG, glm::radians(180.0f), glm::vec3(0,1,0));
     }
-    TG = glm::scale(TG, glm::vec3(altObj/altOrig, altObj/altOrig, altObj/altOrig));
-    TG = glm::translate(TG, glm::vec3(2, 0, 2));
+    else {
+        TG = glm::translate(TG, glm::vec3(float(fil)-0.6f, 0.f, -float(col)-2.5f));
+    }
+    TG = glm::scale(TG, glm::vec3(escala));
+    glm::vec3 centre(-bbMin.x - bbSize.x/2.0f, -bbMin.y, -bbMin.z - bbSize.z/2.0f);
+    TG = glm::translate(TG, centre);
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &TG[0][0]);
+}
+
+void MyGLWidget::modelTransformParet(int fil, int col){
+    glm::vec3 bbMin  = meshParet->GetBBMin();
+    glm::vec3 bbSize = meshParet->GetBBSize();
+    glm::mat4 TG(1.0f);
+    TG = glm::translate(TG, glm::vec3(float(fil), 0.0f, -float(col)));
+    TG = glm::scale(TG, glm::vec3(1.0f/bbSize.x, 1.0f/bbSize.y, 1.0f/bbSize.z));
+    TG = glm::translate(TG, -bbMin);
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &TG[0][0]);
 }
 

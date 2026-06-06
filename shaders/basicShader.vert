@@ -6,6 +6,7 @@ in vec3 matamb;
 in vec3 matdiff;
 in vec3 matspec;
 in float matshin;
+in vec2 UV;
 
 uniform mat4 model;
 uniform mat4 proj;
@@ -17,6 +18,7 @@ out vec3 fmatamb;
 out vec3 fmatdiff;
 out vec3 fmatspec;
 out float fmatshin;
+out vec2 fUV;
 
 void main() {
     fvertSCO = view * model * vec4(vertex, 1.0);
@@ -26,4 +28,5 @@ void main() {
     fmatspec = matspec;
     fmatshin = matshin;
     gl_Position = proj * fvertSCO;
+    fUV = UV;
 }
