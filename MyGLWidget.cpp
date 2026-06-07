@@ -69,16 +69,16 @@ void MyGLWidget::paintGL ( ){
     glm::vec3 ambient = modeNocturn ? glm::vec3(0.05f, 0.05f, 0.05f) : glm::vec3(0.2f,  0.2f,  0.2f);
     glUniform3fv(llumAmbientLoc, 1, &ambient[0]);
 
-
-    glm::vec3 posLlant = glm::vec3(float(xMorty)+0.5f, 0.5f, -float(zMorty));
-    glUniform3fv(posLlantLoc, 1, &posLlant[0]);
-
     glm::vec3 dirLlant;
     if      (rotMorty == 0.0f)   dirLlant = glm::vec3( 0, 0,  1);
     else if (rotMorty == 90.0f)  dirLlant = glm::vec3( 1, 0,  0);
     else if (rotMorty == 180.0f) dirLlant = glm::vec3( 0, 0, -1);
-    else                         dirLlant = glm::vec3(-1, 0,  0);
+    else dirLlant = glm::vec3(-1, 0,  0);
     glUniform3fv(dirLlantLoc, 1, &dirLlant[0]);
+
+    glm::vec3 posLlant = glm::vec3(float(xMorty)+0.5f, 0.5f, -float(zMorty)+0.5f);
+    posLlant += 0.5f * dirLlant;
+    glUniform3fv(posLlantLoc, 1, &posLlant[0]);
 
     glm::vec3 posFantasmaLlum = glm::vec3(float(xFantasma)+0.5f, 0.5f, -float(zFantasma));
     glUniform3fv(posFantasmaLlumLoc, 1, &posFantasmaLlum[0]);
@@ -213,10 +213,10 @@ void MyGLWidget::viewTransform () {
         View = glm::translate(View, -centre);
     }
     else{
-        if(rotMorty == 0) View = glm::lookAt(glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)), glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)+1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        else if (rotMorty == 90) View = glm::lookAt(glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)), glm::vec3(float(xMorty)+1.5f, 0.75f, -float(zMorty)), glm::vec3(0.0f, 1.0f, 0.0f));
-        else if (rotMorty == 180) View = glm::lookAt(glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)), glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)-1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        else View = glm::lookAt(glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)), glm::vec3(float(xMorty)-0.5f, 0.75f, -float(zMorty)), glm::vec3(0.0f, 1.0f, 0.0f));
+        if(rotMorty == 0) View = glm::lookAt(glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)+0.5f), glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)+1.5f), glm::vec3(0.0f, 1.0f, 0.0f));
+        else if (rotMorty == 90) View = glm::lookAt(glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)+0.5f), glm::vec3(float(xMorty)+1.5f, 0.75f, -float(zMorty)+0.5f), glm::vec3(0.0f, 1.0f, 0.0f));
+        else if (rotMorty == 180) View = glm::lookAt(glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)+0.5f), glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)-0.5f), glm::vec3(0.0f, 1.0f, 0.0f));
+        else View = glm::lookAt(glm::vec3(float(xMorty)+0.5f, 0.75f, -float(zMorty)+0.5f), glm::vec3(float(xMorty)-0.5f, 0.75f, -float(zMorty)+0.5f), glm::vec3(0.0f, 1.0f, 0.0f));
     }
     glUniformMatrix4fv (viewLoc, 1, GL_FALSE, &View[0][0]);
 }
@@ -504,7 +504,7 @@ void MyGLWidget::modelTransformMorty(int fil, int col){
     float altObj = 1.5;
     glm::vec3 puntBase = puntBaseModel(morty);
     glm::mat4 TG(1.0f);
-    TG = glm::translate(TG, glm::vec3(float(fil)+0.5f, 0.1f, -float(col)));
+    TG = glm::translate(TG, glm::vec3(float(fil)+0.5f, 0.1f, -float(col)+0.5f));
     TG = glm::rotate(TG, glm::radians(rotMorty), glm::vec3(0.0f, 1.0f, 0.0f));
     TG = glm::scale(TG, glm::vec3(altObj/altOrig, altObj/altOrig, altObj/altOrig));
     TG = glm::translate(TG, glm::vec3(-puntBase[0], -puntBase[1], -puntBase[2]));
@@ -625,7 +625,7 @@ void MyGLWidget::modelTransformMoneda(int fil, int col){
     float altObj = 0.5;
     glm::vec3 puntBase = puntBaseModel(moneda);
     glm::mat4 TG(1.0f);
-    TG = glm::translate(TG, glm::vec3(float(fil), 0.1f, -float(col)));
+    TG = glm::translate(TG, glm::vec3(float(fil)+0.5f, 0.1f, -float(col)+0.5f));
     TG = glm::rotate(TG, glm::radians(rotMoneda), glm::vec3(0.0f, 1.0f, 0.0f));
     TG = glm::scale(TG, glm::vec3(altObj/altOrig, altObj/altOrig, altObj/altOrig));
     TG = glm::translate(TG, glm::vec3(-puntBase[0], -puntBase[1], -puntBase[2]));

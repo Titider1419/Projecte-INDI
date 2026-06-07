@@ -200,6 +200,7 @@ public:
 
         horizontalLayout->addLayout(verticalLayout);
 
+        horizontalLayout->setStretch(0, 1);
 
         retranslateUi(MyForm);
         QObject::connect(pushButton, SIGNAL(clicked()), MyForm, SLOT(close()));
