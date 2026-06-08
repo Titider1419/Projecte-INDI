@@ -14,18 +14,18 @@ MyGLWidget::~MyGLWidget() {}
 
 void MyGLWidget::initializeGL ( ){
     initializeOpenGLFunctions();
-    glClearColor(0.5, 0.7, 1.0, 1.0); // defineix color de fons (d'esborrat)
+    glClearColor(0.5, 0.7, 1.0, 1.0);
     carregaShaders();
     glEnable (GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    morty.load("../../Models3D/Morty.obj");
-    fantasma.load("../../Models3D/Fantasma.obj");
-    moneda.load("../../Models3D/Coin.obj");
+    morty.load(DIR "/Models3D/Morty.obj");
+    fantasma.load(DIR "/Models3D/Fantasma.obj");
+    moneda.load(DIR "/Models3D/Coin.obj");
     crearBuffersModelo(morty, VAO_Morty);
     crearBuffersModelo(fantasma, VAO_Fantasma);
     crearBuffersModelo(moneda, VAO_Moneda);
     meshTorre = new Mesh(this, vertexLoc, normalLoc, texUVLoc, matdiffLoc, matspecLoc, matambLoc, matshinLoc);
-    meshTorre->LoadMesh("../../Models3D/tower.obj");
+    meshTorre->LoadMesh(DIR "/Models3D/tower.obj");
     for(int i = 0; i < N; i++) {
         for(int j = 0; j < M; j++) {
             if(lab[i][j] == 2){
@@ -41,7 +41,7 @@ void MyGLWidget::initializeGL ( ){
     rotMorty = 0.0f, rotFantasma = 0.0f;
     creaBuffersCub();
     meshParet = new Mesh(this, vertexLoc, normalLoc, texUVLoc, matdiffLoc, matspecLoc, matambLoc, matshinLoc);
-    meshParet->LoadMesh("../../Models3D/block.obj");
+    meshParet->LoadMesh(DIR "/Models3D/block.obj");
     generarMonedes();
     escala = 1.0f;
     calcularCapsaContenidora();
@@ -56,6 +56,7 @@ void MyGLWidget::initializeGL ( ){
     glUniform3fv(colorLlantLoc, 1, &colorLlant[0]);
     glm::vec3 colorFant = glm::vec3(0.6f, 0.0f, 1.0f);
     glUniform3fv(colorFantasmaLlumLoc, 1, &colorFant[0]);
+    psi = 0.0f, theta = 0.0f;
     projectTransform();
     viewTransform();
     DEBUG("InitializeGL");
@@ -77,7 +78,7 @@ void MyGLWidget::paintGL ( ){
     glUniform3fv(dirLlantLoc, 1, &dirLlant[0]);
 
     glm::vec3 posLlant = glm::vec3(float(xMorty)+0.5f, 0.5f, -float(zMorty)+0.5f);
-    posLlant += 0.5f * dirLlant;
+    posLlant += 0.1f * dirLlant;
     glUniform3fv(posLlantLoc, 1, &posLlant[0]);
 
     glm::vec3 posFantasmaLlum = glm::vec3(float(xFantasma)+0.5f, 0.5f, -float(zFantasma));
@@ -113,11 +114,13 @@ void MyGLWidget::paintGL ( ){
 
     program->setUniformValue("colorFocus", 1.0f, 1.0f, 1.0f);
 
-    int xTamany = 300, yTamany = 200;
+    glDisable(GL_DEPTH_TEST);
+    int xTamany = width() * (400.0f/1513.0f), yTamany = xTamany * 3.0f/4.0f;
     glViewport(width()-xTamany-20, 20, xTamany, yTamany);
     viewTransformMiniMap();
     projectTransformMiniMap();
     renderScene();
+    glEnable(GL_DEPTH_TEST);
 }
 
 void MyGLWidget::carregaShaders(){
@@ -221,9 +224,6 @@ void MyGLWidget::viewTransform () {
     glUniformMatrix4fv (viewLoc, 1, GL_FALSE, &View[0][0]);
 }
 
-void MyGLWidget::resizeGL(int w, int h){
-}
-
 void MyGLWidget::viewTransformMiniMap(){
     glm::mat4 View = glm::lookAt(glm::vec3 (centre.x, centre.y +50.0f, centre.z), centre, glm::vec3(-1.0f, 0.0f, 0.0f));
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &View[0][0]);
@@ -305,6 +305,7 @@ void MyGLWidget::estMonedes(){
 }
 
 void MyGLWidget::canviarColorFocus(const glm::vec3 &nouColor){
+    makeCurrent();
     colorFocus = nouColor;
     update();
 }
@@ -428,20 +429,20 @@ void MyGLWidget::keyPressEvent(QKeyEvent *e){
         movimentMorty("Left");
     break;
     case Qt::Key_Minus:
-        angle += 0.1f;
+        if(!camaraActiva) angle += 0.1f;
     break;
     case Qt::Key_Plus:
-        angle -= 0.1f;
+        if(!camaraActiva) angle -= 0.1f;
     break;
     case Qt::Key_O:
-        thetaFocus -= 5.0f;
-        if (thetaFocus < 0.0f) thetaFocus = 0;
-        emit thetaFocusEnviat(thetaFocus);
+        thetaFocus -= 0.1f;
+        if (thetaFocus < 0.0f) thetaFocus = 0.0f;
+        thetaFocusCalcul(thetaFocus);
     break;
     case Qt::Key_P:
-        thetaFocus += 5.0f;
+        thetaFocus += 0.1f;
         if (thetaFocus > M_PI) thetaFocus = M_PI;
-        emit thetaFocusEnviat(thetaFocus);
+        thetaFocusCalcul(thetaFocus);
     break;
     case Qt::Key_N:
         modeNocturn = !modeNocturn;
@@ -566,7 +567,7 @@ void MyGLWidget::modelTransformFantasma(int fil, int col){
     float altObj = 0.65;
     glm::vec3 puntBase = puntBaseModel(fantasma);
     glm::mat4 TG(1.0f);
-    TG = glm::translate(TG, glm::vec3(float(fil)+0.5f, 0.1f, -float(col)));
+    TG = glm::translate(TG, glm::vec3(float(fil)+0.5f, 0.1f, -float(col)+0.5f));
     TG = glm::rotate(TG, glm::radians(rotFantasma), glm::vec3(0.0f, 1.0f, 0.0f));
     TG = glm::scale(TG, glm::vec3(altObj/altOrig, altObj/altOrig, altObj/altOrig));
     TG = glm::translate(TG, glm::vec3(-puntBase[0], -puntBase[1], -puntBase[2]));
@@ -647,19 +648,19 @@ void MyGLWidget::modelTransformTorre(int fil, int col){
     float escala = altObj / bbSize.y;
     glm::mat4 TG(1.0f);
     if (fil == 0){
-        TG = glm::translate(TG, glm::vec3(float(fil)-2.5f, 0.f, -float(col)+0.6f));
+        TG = glm::translate(TG, glm::vec3(float(fil)-2.0f, 0.f, -float(col)+0.5f));
         TG = glm::rotate(TG, glm::radians(90.0f), glm::vec3(0,1,0));
     }
-    else if (fil == 9) {
-        TG = glm::translate(TG, glm::vec3(float(fil)+2.5, 0.f, -float(col)-0.6f));
+    else if (fil == N-1) {
+        TG = glm::translate(TG, glm::vec3(float(fil)+3.0f, 0.f, -float(col)+0.5f));
         TG = glm::rotate(TG, glm::radians(270.0f), glm::vec3(0,1,0));
     }
     else if (col == 0) {
-        TG = glm::translate(TG, glm::vec3(float(fil)+0.6f, 0.f, -float(col)+2.5f));
+        TG = glm::translate(TG, glm::vec3(float(fil)+0.5, 0.f, -float(col)+3.0f));
         TG = glm::rotate(TG, glm::radians(180.0f), glm::vec3(0,1,0));
     }
     else {
-        TG = glm::translate(TG, glm::vec3(float(fil)-0.6f, 0.f, -float(col)-2.5f));
+        TG = glm::translate(TG, glm::vec3(float(fil)+0.5f, 0.f, -float(col)-2.0f));
     }
     TG = glm::scale(TG, glm::vec3(escala));
     glm::vec3 centre(-bbMin.x - bbSize.x/2.0f, -bbMin.y, -bbMin.z - bbSize.z/2.0f);

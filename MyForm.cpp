@@ -46,10 +46,30 @@ MyForm::MyForm (QWidget* parent) : QWidget(parent)
   connect(ui.zoomSlider, &QSlider::valueChanged, ui.widget, &MyGLWidget::zoomObtingut);
   connect(ui.widget, &MyGLWidget::zoomEnviat, ui.zoomSlider, &QSlider::setValue);
   connect(ui.camaraGen, &QRadioButton::clicked, ui.widget, &MyGLWidget::camaraGen);
+  connect(ui.camaraGen, &QRadioButton::clicked, this, [this](){
+      ui.psiSlider->setEnabled(true);
+      ui.thetaSlider->setEnabled(true);
+      ui.zoomSlider->setEnabled(true);
+  });
   connect(ui.primPersona, &QRadioButton::clicked, ui.widget, &MyGLWidget::primeraPers);
+  connect(ui.primPersona, &QRadioButton::clicked, this, [this](){
+      ui.psiSlider->setEnabled(false);
+      ui.thetaSlider->setEnabled(false);
+      ui.zoomSlider->setEnabled(false);
+  });
   connect(ui.widget, &MyGLWidget::alternarCamara, this, [this](bool primeraPers){
-        if (primeraPers) ui.primPersona->setChecked(true);
-        else ui.camaraGen->setChecked(true);
+        if (primeraPers){
+            ui.primPersona->setChecked(true);
+            ui.psiSlider->setEnabled(false);
+            ui.thetaSlider->setEnabled(false);
+            ui.zoomSlider->setEnabled(false);
+        }
+        else{
+            ui.camaraGen->setChecked(true);
+            ui.psiSlider->setEnabled(true);
+            ui.thetaSlider->setEnabled(true);
+            ui.zoomSlider->setEnabled(true);
+        }
   });
   connect(ui.rotMonedes, &QRadioButton::clicked, ui.widget, &MyGLWidget::rotMonedes);
   connect(ui.estMonedes, &QRadioButton::clicked, ui.widget, &MyGLWidget::estMonedes);
@@ -58,7 +78,7 @@ MyForm::MyForm (QWidget* parent) : QWidget(parent)
       if (timerActiu) ui.rotMonedes->setChecked(true);
       else ui.estMonedes->setChecked(true);
   });
-  connect(ui.colorLlum, &QPushButton::clicked, this, &MyForm::colorLlum);
+  connect(ui.colorLlum, &QPushButton::clicked, this, &MyForm::obrirDialegColor);
   connect(ui.solSlider, &QSlider::valueChanged, ui.widget, &MyGLWidget::thetaFocusObtingut);
   connect(ui.widget, &MyGLWidget::thetaFocusEnviat, ui.solSlider, &QSlider::setValue);
   connect(ui.nocturn, &QCheckBox::toggled, ui.widget, &MyGLWidget::activarModeNocturn);
@@ -107,13 +127,20 @@ void MyForm::jocPerdut(){
     }
 }
 
-void MyForm::colorLlum()
+void MyForm::obrirDialegColor()
 {
-    QColor colorTriat = QColorDialog::getColor(Qt::white, this, "Escull el color del focus");
+    // Creamos la instancia del diálogo manualmente en lugar de usar el método estático
+    QColorDialog dialeg(Qt::white, this);
+    dialeg.setWindowTitle("Escull el color del focus");
 
+    // TRUCO: Forzamos a que use el diálogo propio de Qt y NO el del sistema operativo
+    dialeg.setOption(QColorDialog::DontUseNativeDialog, true);
 
-    if (colorTriat.isValid())
+    // Ejecutamos de forma modal (bloquea la ventana de atrás de forma correcta)
+    if (dialeg.exec() == QDialog::Accepted)
     {
+        QColor colorTriat = dialeg.currentColor();
+
         float r = colorTriat.redF();
         float g = colorTriat.greenF();
         float b = colorTriat.blueF();

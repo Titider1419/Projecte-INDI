@@ -32,4 +32,6 @@ LIBS += $$PWD/assimp/lib/libpolyclipping.a
 LIBS += $$PWD/assimp/lib/libpugixml.a
 LIBS += $$PWD/assimp/lib/libz.a
 
+DEFINES += DIR=\\\"$$PWD\\\"
+
 QMAKE_CXXFLAGS += -Wno-ignored-qualifiers -Wno-type-limits -Wno-unused-parameter

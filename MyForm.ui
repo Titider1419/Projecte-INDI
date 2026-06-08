@@ -120,7 +120,7 @@
           <item>
            <widget class="QRadioButton" name="rotMonedes">
             <property name="text">
-             <string>Monedes rotan</string>
+             <string>Monedes roten</string>
             </property>
            </widget>
           </item>

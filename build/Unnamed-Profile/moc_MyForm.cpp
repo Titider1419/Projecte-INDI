@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MyForm_t {
     QByteArrayData data[8];
-    char stringdata0[73];
+    char stringdata0[80];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -39,11 +39,12 @@ QT_MOC_LITERAL(3, 27, 7), // "actuals"
 QT_MOC_LITERAL(4, 35, 6), // "totals"
 QT_MOC_LITERAL(5, 42, 10), // "jocGuanyat"
 QT_MOC_LITERAL(6, 53, 9), // "jocPerdut"
-QT_MOC_LITERAL(7, 63, 9) // "colorLlum"
+QT_MOC_LITERAL(7, 63, 16) // "obrirDialegColor"
 
     },
     "MyForm\0actualitzarMonedes\0\0actuals\0"
-    "totals\0jocGuanyat\0jocPerdut\0colorLlum"
+    "totals\0jocGuanyat\0jocPerdut\0"
+    "obrirDialegColor"
 };
 #undef QT_MOC_LITERAL
 
@@ -84,7 +85,7 @@ void MyForm::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 0: _t->actualitzarMonedes((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         case 1: _t->jocGuanyat(); break;
         case 2: _t->jocPerdut(); break;
-        case 3: _t->colorLlum(); break;
+        case 3: _t->obrirDialegColor(); break;
         default: ;
         }
     }

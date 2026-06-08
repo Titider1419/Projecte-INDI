@@ -14,7 +14,7 @@ EQ            = =
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_QML_DEBUG -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DDIR=\"/home/est/e9978472/Escriptori/INDI/Projecte-INDI\" -DQT_QML_DEBUG -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -g -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -Wno-ignored-qualifiers -Wno-type-limits -Wno-unused-parameter -O2 -g -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I../../../Projecte-INDI -I. -I../../assimp/include -I../../assimp -I../../Models3D -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
@@ -37,10 +37,10 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = Bloc3_Exemple1.0.0
-DISTDIR = /home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/build/Unnamed-Profile/.tmp/Bloc3_Exemple1.0.0
+DISTDIR = /home/est/e9978472/Escriptori/INDI/Projecte-INDI/build/Unnamed-Profile/.tmp/Bloc3_Exemple1.0.0
 LINK          = g++
 LFLAGS        = 
-LIBS          = $(SUBLIBS) /home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/assimp/lib/libassimp.a /home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/assimp/lib/libdraco.a /home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/assimp/lib/libkubazip.a /home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/assimp/lib/libminizip.a /home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/assimp/lib/libpoly2tri.a /home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/assimp/lib/libpolyclipping.a /home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/assimp/lib/libpugixml.a /home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/assimp/lib/libz.a /usr/lib/x86_64-linux-gnu/libQt5OpenGL.so /usr/lib/x86_64-linux-gnu/libQt5Widgets.so /usr/lib/x86_64-linux-gnu/libQt5Gui.so /usr/lib/x86_64-linux-gnu/libQt5Core.so -lGL -lpthread   
+LIBS          = $(SUBLIBS) /home/est/e9978472/Escriptori/INDI/Projecte-INDI/assimp/lib/libassimp.a /home/est/e9978472/Escriptori/INDI/Projecte-INDI/assimp/lib/libdraco.a /home/est/e9978472/Escriptori/INDI/Projecte-INDI/assimp/lib/libkubazip.a /home/est/e9978472/Escriptori/INDI/Projecte-INDI/assimp/lib/libminizip.a /home/est/e9978472/Escriptori/INDI/Projecte-INDI/assimp/lib/libpoly2tri.a /home/est/e9978472/Escriptori/INDI/Projecte-INDI/assimp/lib/libpolyclipping.a /home/est/e9978472/Escriptori/INDI/Projecte-INDI/assimp/lib/libpugixml.a /home/est/e9978472/Escriptori/INDI/Projecte-INDI/assimp/lib/libz.a /usr/lib/x86_64-linux-gnu/libQt5OpenGL.so /usr/lib/x86_64-linux-gnu/libQt5Widgets.so /usr/lib/x86_64-linux-gnu/libQt5Gui.so /usr/lib/x86_64-linux-gnu/libQt5Core.so -lGL -lpthread   
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -124,6 +124,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_theme_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_vulkan_support_private.pri \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_websockets.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xcb_qpa_lib_private.pri \
@@ -228,6 +229,7 @@ Makefile: ../../Bloc3_Exemple.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g+
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_theme_support_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_vulkan_support_private.pri \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_websockets.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xcb_qpa_lib_private.pri \
@@ -311,6 +313,7 @@ Makefile: ../../Bloc3_Exemple.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g+
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_theme_support_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_vulkan_support_private.pri:
+/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_websockets.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_widgets_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xcb_qpa_lib_private.pri:
@@ -374,7 +377,7 @@ clean: compiler_clean
 
 distclean: clean 
 	-$(DEL_FILE) $(TARGET) 
-	-$(DEL_FILE) /home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/build/Unnamed-Profile/Bloc3_Exemple.debug .qmake.stash
+	-$(DEL_FILE) /home/est/e9978472/Escriptori/INDI/Projecte-INDI/build/Unnamed-Profile/Bloc3_Exemple.debug .qmake.stash
 	-$(DEL_FILE) Makefile
 
 
@@ -409,7 +412,7 @@ compiler_moc_header_make_all: moc_MyForm.cpp moc_BL2GLWidget.cpp moc_MyGLWidget.
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_MyForm.cpp moc_BL2GLWidget.cpp moc_MyGLWidget.cpp
 moc_MyForm.cpp: ../../MyForm.h \
-		ui_MyForm.h \
+		../../ui_MyForm.h \
 		../../MyGLWidget.h \
 		../../BL2GLWidget.h \
 		../../assimp/include/glm/glm.hpp \
@@ -771,7 +774,7 @@ moc_MyForm.cpp: ../../MyForm.h \
 		../../assimp/include/gli/core/flip.inl \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/build/Unnamed-Profile/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/andres/UNI/Q4/INDI/projecte/Projecte-INDI -I/home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/assimp/include -I/home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/assimp -I/home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/Models3D -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../MyForm.h -o moc_MyForm.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/est/e9978472/Escriptori/INDI/Projecte-INDI/build/Unnamed-Profile/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/est/e9978472/Escriptori/INDI/Projecte-INDI -I/home/est/e9978472/Escriptori/INDI/Projecte-INDI/assimp/include -I/home/est/e9978472/Escriptori/INDI/Projecte-INDI/assimp -I/home/est/e9978472/Escriptori/INDI/Projecte-INDI/Models3D -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../MyForm.h -o moc_MyForm.cpp
 
 moc_BL2GLWidget.cpp: ../../BL2GLWidget.h \
 		../../assimp/include/glm/glm.hpp \
@@ -940,7 +943,7 @@ moc_BL2GLWidget.cpp: ../../BL2GLWidget.h \
 		../../assimp/include/glm/gtc/matrix_transform.inl \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/build/Unnamed-Profile/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/andres/UNI/Q4/INDI/projecte/Projecte-INDI -I/home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/assimp/include -I/home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/assimp -I/home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/Models3D -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../BL2GLWidget.h -o moc_BL2GLWidget.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/est/e9978472/Escriptori/INDI/Projecte-INDI/build/Unnamed-Profile/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/est/e9978472/Escriptori/INDI/Projecte-INDI -I/home/est/e9978472/Escriptori/INDI/Projecte-INDI/assimp/include -I/home/est/e9978472/Escriptori/INDI/Projecte-INDI/assimp -I/home/est/e9978472/Escriptori/INDI/Projecte-INDI/Models3D -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../BL2GLWidget.h -o moc_BL2GLWidget.cpp
 
 moc_MyGLWidget.cpp: ../../MyGLWidget.h \
 		../../BL2GLWidget.h \
@@ -1303,7 +1306,7 @@ moc_MyGLWidget.cpp: ../../MyGLWidget.h \
 		../../assimp/include/gli/core/flip.inl \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/build/Unnamed-Profile/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/andres/UNI/Q4/INDI/projecte/Projecte-INDI -I/home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/assimp/include -I/home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/assimp -I/home/andres/UNI/Q4/INDI/projecte/Projecte-INDI/Models3D -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../MyGLWidget.h -o moc_MyGLWidget.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/est/e9978472/Escriptori/INDI/Projecte-INDI/build/Unnamed-Profile/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/est/e9978472/Escriptori/INDI/Projecte-INDI -I/home/est/e9978472/Escriptori/INDI/Projecte-INDI/assimp/include -I/home/est/e9978472/Escriptori/INDI/Projecte-INDI/assimp -I/home/est/e9978472/Escriptori/INDI/Projecte-INDI/Models3D -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../../MyGLWidget.h -o moc_MyGLWidget.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -1686,7 +1689,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 ####### Compile
 
 main.o: ../../main.cpp ../../MyForm.h \
-		ui_MyForm.h \
+		../../ui_MyForm.h \
 		../../MyGLWidget.h \
 		../../BL2GLWidget.h \
 		../../assimp/include/glm/glm.hpp \
@@ -2049,7 +2052,7 @@ main.o: ../../main.cpp ../../MyForm.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../main.cpp
 
 MyForm.o: ../../MyForm.cpp ../../MyForm.h \
-		ui_MyForm.h \
+		../../ui_MyForm.h \
 		../../MyGLWidget.h \
 		../../BL2GLWidget.h \
 		../../assimp/include/glm/glm.hpp \

@@ -29,7 +29,6 @@ class MyGLWidget : public BL2GLWidget {
     void carregaShaders() override;
     void projectTransform();
     void viewTransform();
-    void resizeGL(int w, int h);
     GLuint VAO_Cub;
     void creaBuffersCub ();
     void modelTransformMorty(int fil, int col);
